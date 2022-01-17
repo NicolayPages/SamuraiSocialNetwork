@@ -1,0 +1,74 @@
+.User {
+   display: flex;
+   gap: 20px;
+   .User__ava {
+      border-radius: 10px;
+      overflow: hidden;
+      img {
+         width: 220px;
+         height: 240px;
+         border-radius: 10px;
+      }
+   }
+   .User__info {
+      color: #303030;
+   }
+   .User__name {
+      font-weight: 500;
+      font-size: 33px;
+      margin-bottom: 15px;
+   }
+   .User__descript {
+      li {
+         color: #303030;
+         font-size: 20px;
+         margin-bottom: 10px;
+         display: flex;
+         align-items: center;
+         gap: 10px;
+      }
+      margin-bottom: 20px;
+   }
+}
+.contacts {
+   color: #303030;
+   h2 {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 15px;
+   }
+   li {
+      font-size: 20px;
+      margin-bottom: 10px;
+   }
+   a {
+      color: #303030;
+      text-decoration: underline;
+   }
+}
+
+.btnContainer {
+   margin-top: 10px;
+   width: 100%;
+}
+.followedBtn {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   height: 40px;
+   padding: 0 15px;
+   font-size: 20px;
+   text-transform: uppercase;
+   background-color: #ad66d5;
+   color: #fff;
+   border-radius: 10px;
+   font-weight: 500;
+   box-shadow: 0px 1px 8px -1px rgba(34, 60, 80, 0.2);
+   position: relative;
+   top: 0;
+   &:active {
+      box-shadow: 0px 1px 8px -1px rgba(34, 60, 80, 0.2);
+      top: 1px;
+   }
+}
