@@ -1,0 +1,20 @@
+.link a {
+   font-size: 18px;
+   font-weight: 500;
+   line-height: 130%;
+   color: #303030;
+   display: inline-block;
+   position: relative;
+   padding-left: 15px;
+   &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(0, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #303030;
+   }
+}
