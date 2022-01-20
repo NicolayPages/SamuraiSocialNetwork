@@ -72,6 +72,7 @@
    font-size: 20px;
    color: #fff;
    position: relative;
+   margin-bottom: 10px;
    &::after {
       position: absolute;
       bottom: -2px;
@@ -81,4 +82,11 @@
       height: 2px;
       width: 100%;
    }
+}
+
+.captcha {
+   border-radius: 10px;
+   width: 100%;
+   height: 60px;
+   margin: 10px 0px;
 }

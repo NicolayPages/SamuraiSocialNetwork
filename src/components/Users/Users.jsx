@@ -15,6 +15,7 @@ const Users = (props) => {
       status={u.status}
       name={u.name}
       followed={u.followed}
+      isAuth={props.isAuth}
    />)
    return (
       <div className={s.wrapper}>
@@ -40,13 +41,16 @@ const UserItem = (props) => {
                   <img src={props.photos.small != null ? props.photos.small : userPhoto} alt="" />
                </NavLink>
             </div>
-            <div>
-               {props.followed
-                  ? <button disabled={props.isFollowing.some(id => id === props.id)}
-                     className={s.followedBtn} onClick={() => { props.unfollowUsers(props.id) }}>unfollow</button>
-                  : <button disabled={props.isFollowing.some(id => id === props.id)}
-                     className={s.followedBtn} onClick={() => { props.followUsers(props.id) }}>follow</button>}
-            </div>
+            {props.isAuth &&
+               <div>
+                  {props.followed
+                     ? <button disabled={props.isFollowing.some(id => id === props.id)}
+                        className={s.followedBtn} onClick={() => { props.unfollowUsers(props.id) }}>unfollow</button>
+                     : <button disabled={props.isFollowing.some(id => id === props.id)}
+                        className={s.followedBtn} onClick={() => { props.followUsers(props.id) }}>follow</button>}
+               </div>
+            }
+
          </div>
          <div className={s.info}>
             <div className={s.mainInfo}>

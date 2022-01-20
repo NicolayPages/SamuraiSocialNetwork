@@ -1,4 +1,5 @@
 import { authUserData } from './auth-reducer';
+import { showError } from './errors-reducer';
 
 
 const INITIALIZED_SUCCESS = 'INITIALIZED_SUCCESS';
@@ -25,11 +26,15 @@ export const setInitialized = () => ({ type: INITIALIZED_SUCCESS, });
 
 export const initializedApp = () => {
    return (dispatch) => {
-      let promise = dispatch(authUserData());
-      Promise.all([promise])
-         .then(() => {
-            dispatch(setInitialized());
-         });
+      try {
+         let promise = dispatch(authUserData());
+         Promise.all([promise])
+            .then(() => {
+               dispatch(setInitialized());
+            });
+      } catch (error) {
+         dispatch(showError(error.message));
+      }
    }
 };
 

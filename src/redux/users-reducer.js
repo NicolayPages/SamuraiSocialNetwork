@@ -1,4 +1,4 @@
-
+import { showError } from './errors-reducer';
 import { updateObjectInArray } from '../utilits/validators/object-helpers';
 import { usersAPI, profileAPI } from './../api';
 
@@ -70,44 +70,71 @@ export const toggleIsFollowing = (isFollowing, userId) => ({ type: IS_FOLLOWING,
 
 
 const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) => {
-   dispatch(toggleIsFollowing(true, userId));
-   let data = await apiMethod(userId)
-   if (data.resultCode == 0) {
-      dispatch(actionCreator(userId))
+   try {
+      dispatch(toggleIsFollowing(true, userId));
+      let data = await apiMethod(userId)
+      if (data.resultCode == 0) {
+         dispatch(actionCreator(userId))
+      }
+      dispatch(toggleIsFollowing(false, userId));
+   } catch (error) {
+      dispatch(showError(error.message));
    }
-   dispatch(toggleIsFollowing(false, userId));
-}
-
+};
 
 export const requestUsers = (currentPage, pageSize) => async (dispatch) => {
-   dispatch(toggleIsFetching(true));
-   let data = await usersAPI.getUsers(currentPage, pageSize);
-   dispatch(setUsers(data.items));
-   dispatch(setTotalCount(data.totalCount));
-   dispatch(toggleIsFetching(false));
+   try {
+      dispatch(toggleIsFetching(true));
+      let data = await usersAPI.getUsers(currentPage, pageSize);
+      dispatch(setUsers(data.items));
+      dispatch(setTotalCount(data.totalCount));
+      dispatch(toggleIsFetching(false));
+   } catch (error) {
+      dispatch(showError(error.message));
+   }
 };
+
 export const setUsersPage = (p, pageSize) => async (dispatch) => {
-   dispatch(setPage(p));
-   dispatch(toggleIsFetching(true));
-   let data = await usersAPI.getUsers(p, pageSize);
-   dispatch(toggleIsFetching(false));
-   dispatch(setUsers(data.items));
+   try {
+      dispatch(setPage(p));
+      dispatch(toggleIsFetching(true));
+      let data = await usersAPI.getUsers(p, pageSize);
+      dispatch(toggleIsFetching(false));
+      dispatch(setUsers(data.items));
+   } catch (error) {
+      dispatch(showError(error.message));
+   }
 };
+
 export const followUsers = (userId) => {
    return async (dispatch) => {
-      followUnfollowFlow(dispatch, userId, usersAPI.followUser.bind(usersAPI), follow)
+      try {
+         followUnfollowFlow(dispatch, userId, usersAPI.followUser.bind(usersAPI), follow)
+      } catch (error) {
+         dispatch(showError(error.message));
+      }
    }
 };
+
 export const unfollowUsers = (userId) => {
    return async (dispatch) => {
-      followUnfollowFlow(dispatch, userId, usersAPI.unfollowUser.bind(usersAPI), unfollow)
+      try {
+         followUnfollowFlow(dispatch, userId, usersAPI.unfollowUser.bind(usersAPI), unfollow)
+      } catch (error) {
+         dispatch(showError(error.message));
+      }
    }
 };
+
 export const getUsersTest = () => async (dispatch) => {
-   dispatch(toggleIsFetching(true));
-   let data = await profileAPI.getUsersForProfile();
-   dispatch(setUsers(data.items));
-   dispatch(toggleIsFetching(false));
+   try {
+      dispatch(toggleIsFetching(true));
+      let data = await profileAPI.getUsersForProfile();
+      dispatch(setUsers(data.items));
+      dispatch(toggleIsFetching(false));
+   } catch (error) {
+      dispatch(showError(error.message));
+   }
 };
 
 export default usersReducer;

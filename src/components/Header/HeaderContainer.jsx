@@ -3,10 +3,15 @@ import { connect } from 'react-redux';
 import { getIsAuth, getLogin } from '../../redux/auth-selectors';
 import { authUserLogOut } from './../../redux/auth-reducer';
 import { getProfile } from './../../redux/profile-selectors';
+import { getUserProfile } from './../../redux/profile-reducer';
 import s from './Header.module.scss'
 import { Link } from 'react-router-dom';
 import userPhoto from '../../assets/images/user.png'
 import logo from '../../../src/assets/images/logo.png'
+import { getUserId } from './../../redux/auth-selectors';
+import Preloader from '../common/Preloader/Preloader';
+import { compose } from 'redux';
+import { withRouter } from 'react-router';
 
 
 
@@ -24,9 +29,8 @@ class HeaderContainer extends React.Component {
 
 const Header = (props) => {
   let onLogOutUser = () => {
-    props.authUserLogOut()
+    props.authUserLogOut();
   }
-
   return (
     <header className={s.Header}>
       <div className={s.container}>
@@ -54,6 +58,14 @@ let mapStateToProps = (state) => ({
   isAuth: getIsAuth(state),
   login: getLogin(state),
   profile: getProfile(state),
+  userId: getUserId(state),
 });
 
-export default connect(mapStateToProps, { authUserLogOut })(HeaderContainer);
+
+export default compose(
+  connect(mapStateToProps, { authUserLogOut, getUserProfile }),
+  withRouter,
+)(HeaderContainer);
+
+
+

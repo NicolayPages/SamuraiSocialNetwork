@@ -16,8 +16,7 @@ class LoginContainer extends React.Component {
       super(props)
    }
    onSubmit = (formData, dispatch) => {
-      this.props.authUserLogIn(formData.email, formData.password, formData.rememberMe);
-      dispatch(reset('login'));
+      this.props.authUserLogIn(formData.email, formData.password, formData.rememberMe, formData.captcha);
    };
    render() {
 
@@ -27,7 +26,7 @@ class LoginContainer extends React.Component {
       return (
          <div className={s.container}>
             <h1 className={s.title}>Login</h1>
-            <LoginReduxForm onSubmit={this.onSubmit} />
+            <LoginReduxForm onSubmit={this.onSubmit} captcha={this.props.captcha} />
          </div>
       );
    };
@@ -38,7 +37,13 @@ const LoginForm = (props) => {
    return (
       <form className={s.form} onSubmit={props.handleSubmit}>
          <div>
-            <Field component={Input} className={s.input} type="text" name='email' placeholder='Email' tabIndex={1}
+            <Field
+               component={Input}
+               className={s.input}
+               type="text"
+               name='email'
+               placeholder='Email'
+               tabIndex={1}
                validate={[required, maxLength30]} />
          </div>
          <div>
@@ -49,10 +54,14 @@ const LoginForm = (props) => {
             <span> remember me</span>
          </div>
          {props.error && <span className={s.formSummeryError}>{props.error}</span>}
+         {props.captcha && <div>
+            <img className={s.captcha} src={props.captcha} />
+            <Field component={Input} className={s.input} type="text" name='captcha' placeholder='Captcha' />
+         </div>}
          <div className={s.buttonWrapper}>
             <button className={s.button} tabIndex={4}>Login</button>
          </div>
-      </form>
+      </form >
    );
 };
 
@@ -61,6 +70,7 @@ const LoginReduxForm = reduxForm({ form: 'login' })(LoginForm)
 let mapStateToProps = (state) => {
    return {
       isAuth: getIsAuth(state),
+      captcha: state.auth.captcha,
    };
 };
 

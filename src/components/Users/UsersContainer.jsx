@@ -5,6 +5,7 @@ import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
 import { compose } from "redux";
 import { getCurrentPage, getIsFetching, getIsFollowing, getPageSize, getTotalUserCount, getUsers } from "../../redux/users-selectors";
+import { getIsAuth } from './../../redux/auth-selectors';
 
 class UsersContainer extends React.Component {
    constructor(props) {
@@ -32,6 +33,7 @@ class UsersContainer extends React.Component {
             unfollowUsers={this.props.unfollowUsers}
             followUsers={this.props.followUsers}
             getUsersTest={this.props.getUsersTest}
+            isAuth={this.props.isAuth}
          />
       </>
       );
@@ -46,6 +48,7 @@ let mapStateToProps = (state) => {
       currentPage: getCurrentPage(state),
       isFetching: getIsFetching(state),
       isFollowing: getIsFollowing(state),
+      isAuth: getIsAuth(state)
    };
 };
 

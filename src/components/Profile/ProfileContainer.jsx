@@ -5,18 +5,19 @@ import { compose } from 'redux';
 import { getUserId } from '../../redux/auth-selectors';
 import Preloader from '../common/Preloader/Preloader';
 import { withAuthRedirect } from './../../hoc/withAuthRedirect';
-import { getStatus, getUserProfile, updateStatus } from './../../redux/profile-reducer';
+import { getStatus, getUserProfile, updateStatus, updatePhoto, onEditMode, offEditMode } from './../../redux/profile-reducer';
 import { getIsFetching, getProfile, getUserStatus } from './../../redux/profile-selectors';
 import { followUsers, getUsersTest, unfollowUsers } from './../../redux/users-reducer';
 import { getIsFollowing, getUsers } from './../../redux/users-selectors';
 import Profile from './Profile';
+import { getIsAuth } from './../../redux/auth-selectors';
 
 
 class ProfileContainer extends React.Component {
   constructor(props) {
     super(props)
   }
-  componentDidMount() {
+  refreshProfile() {
     let user = this.props.match.params.userId;
     if (!user) {
       user = this.props.AuthUserId
@@ -27,12 +28,21 @@ class ProfileContainer extends React.Component {
     this.props.getUsersTest()
     this.props.getUserProfile(user)
     this.props.getStatus(user)
+  }
+  componentDidMount() {
+    this.refreshProfile();
   };
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.match.params.userId != prevProps.match.params.userId) {
+      this.refreshProfile();
+    }
+  }
   render() {
     return (
       <>
         {this.props.isFetching ? <Preloader /> : null}
-        < Profile {...this.props} />
+        < Profile {...this.props} isOwner={!this.props.match.params.userId} updatePhoto={this.props.updatePhoto}
+          editMode={this.props.editMode} onEditMode={this.props.onEditMode} isAuth={this.props.isAuth} />
       </>
     )
   };
@@ -48,12 +58,16 @@ let mapStateToProps = (state) => {
     users: getUsers(state),
     isFollowing: getIsFollowing(state),
     authId: getUserId(state),
+    editMode: state.profilePage.editMode,
+    isAuth: getIsAuth(state),
   };
 };
 
 
 export default compose(
-  connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, followUsers, unfollowUsers, getUsersTest }),
+  connect(mapStateToProps, {
+    getUserProfile, getStatus, updateStatus, followUsers, unfollowUsers, getUsersTest, updatePhoto,
+    onEditMode,
+  }),
   withRouter,
-  withAuthRedirect,
 )(ProfileContainer);

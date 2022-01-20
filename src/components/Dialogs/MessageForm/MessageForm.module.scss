@@ -1,6 +1,9 @@
 .messageForm {
    display: flex;
    margin-top: 80px;
+   box-shadow: 0px 4px 8px 2px rgba(173, 102, 213, 0.42);
+   border-radius: 10px;
+   margin-bottom: 10px;
 }
 .messageArea {
    resize: none;
@@ -22,4 +25,5 @@
    padding: 10px 30px;
    height: 100px;
    border-radius: 0 10px 10px 0;
+   box-shadow: 0px 4px 8px 2px rgba(173, 102, 213, 0.42);
 }
