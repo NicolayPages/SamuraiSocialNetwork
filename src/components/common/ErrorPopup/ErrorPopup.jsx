@@ -13,9 +13,12 @@ const ErrorPopup = (props) => {
    return (
       <div className={showError ? s.wrapper : s.wrapperNone}>
          <div className={s.wrapperBody}>
-            <div className={s.closeWrapper}><p className={s.close} onClick={deactivateMode}>x</p></div>
+            <div className={s.header}>
+               <h1 className={s.title}>Oops, something is wrong!</h1>
+               <div className={s.closeWrapper}><p className={s.close} onClick={deactivateMode}>x</p></div>
+            </div>
             <div className={s.content}>
-               <h1 className={s.title}>{props.errorMessage}</h1>
+               <h2 className={s.subtitle}>{props.errorMessage}</h2>
                <div className={s.image}><img src={errorIcon} alt="" /></div>
             </div>
          </div>

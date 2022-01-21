@@ -8,7 +8,7 @@ const NotFound = (props) => {
    return (
       <div className={s.wrapper}>
          <h1 className={s.title}>
-            Oops, this page was not found,<br />
+            Oops, this page  not found,<br />
             please click on button to come back. <br />
             P.S it`s under the dog
          </h1>

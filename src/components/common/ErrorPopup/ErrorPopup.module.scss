@@ -117,23 +117,35 @@
    display: flex;
    justify-content: flex-end;
 }
+.header {
+   display: flex;
+   justify-content: space-between;
+   padding: 10px;
+}
+.title {
+   padding: 20px 0px 0px 10px;
+   font-size: 30px;
+   font-weight: 600;
+   color: #303030;
+   line-height: 120%;
+}
 .close {
    font-size: 30px;
    font-weight: 600;
    color: #303030;
    cursor: pointer;
-   padding: 10px;
 }
+
 .content {
    display: flex;
    align-items: center;
    justify-content: flex-end;
 }
-.title {
+.subtitle {
    font-size: 25px;
    font-weight: 600;
    color: red;
-   padding: 70px 0px 0px 20px;
+   padding: 110px 0px 0px 20px;
    line-height: 120%;
 }
 .image {
