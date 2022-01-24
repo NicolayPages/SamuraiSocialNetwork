@@ -43,7 +43,7 @@ const authReducer = (state = initialState, action) => {
 
 export const setAuthUserData = (userId, email, login, captcha) => ({ type: SET_USER_DATA, data: { userId, email, login, captcha } });
 export const setAuthLogin = (email, password, rememberMe) => ({ type: SET_LOGIN, formData: { email, password, rememberMe } });
-export const setAuthLogout = (userId, email, login, isAuth) => ({ type: SET_LOGOUT, data: { userId, email, login, isAuth, } });
+export const setAuthLogout = (userId, email, login, isAuth, captcha) => ({ type: SET_LOGOUT, data: { userId, email, login, isAuth, captcha } });
 export const setSecurityCaptcha = (captcha) => ({ type: SET_CAPTCHA, captcha });
 
 
@@ -81,7 +81,7 @@ export const authUserLogOut = () => async (dispatch) => {
    try {
       let data = await authAPI.logOutUser();
       if (data.resultCode == 0) {
-         dispatch(setAuthLogout(null, null, null, false));
+         dispatch(setAuthLogout(null, null, null, false, null));
       }
    } catch (error) {
       dispatch(showError(error.message));

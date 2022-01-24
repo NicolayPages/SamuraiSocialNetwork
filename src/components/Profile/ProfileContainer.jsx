@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { Redirect, withRouter } from 'react-router';
 import { compose } from 'redux';
 import { getUserId } from '../../redux/auth-selectors';
 import Preloader from '../common/Preloader/Preloader';
@@ -20,14 +20,14 @@ class ProfileContainer extends React.Component {
   refreshProfile() {
     let user = this.props.match.params.userId;
     if (!user) {
-      user = this.props.AuthUserId
+      user = this.props.AuthUserId;
       if (!user) {
         this.props.history.push('/login');
       }
     };
-    this.props.getUsersTest()
-    this.props.getUserProfile(user)
-    this.props.getStatus(user)
+    this.props.getUserProfile(user);
+    this.props.getStatus(user);
+    this.props.getUsersTest();
   }
   componentDidMount() {
     this.refreshProfile();

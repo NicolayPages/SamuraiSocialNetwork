@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import Dialogs from './Dialogs';
 import { withAuthRedirect } from './../../hoc/withAuthRedirect';
 import { getDialogs, getMessages } from '../../redux/dialogs-selectors';
-import { getIsAuth } from './../../redux/auth-selectors';
 
 class DialogsContainer extends React.Component {
    constructor(props) {

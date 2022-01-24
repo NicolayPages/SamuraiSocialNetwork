@@ -100,23 +100,15 @@ export const offEditMode = () => ({ type: OFF_EDIT_MODE });
 
 
 export const getUserProfile = (userId) => async (dispatch) => {
-   try {
-      dispatch(toggleIsFetching(true));
-      let data = await profileAPI.getProfile(userId);
-      dispatch(setUserProfile(data));
-      dispatch(toggleIsFetching(false));
-   } catch (error) {
-      dispatch(showError(error.message));
-   }
+   dispatch(toggleIsFetching(true));
+   let data = await profileAPI.getProfile(userId);
+   dispatch(setUserProfile(data));
+   dispatch(toggleIsFetching(false));
 };
 
 export const getStatus = (userId) => async (dispatch) => {
-   try {
-      let response = await profileAPI.getStatus(userId);
-      dispatch(setStatus(response.data));
-   } catch (error) {
-      dispatch(showError(error.message));
-   }
+   let response = await profileAPI.getStatus(userId);
+   dispatch(setStatus(response.data));
 };
 
 export const updateStatus = (status) => async (dispatch) => {
