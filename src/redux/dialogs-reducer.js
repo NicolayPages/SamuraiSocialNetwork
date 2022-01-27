@@ -9,7 +9,6 @@ let initialState = {
    messages: [
       { id: 1, name: "Billy", message: "Oh shit Im sorry" },
       { id: 2, name: "Alex", message: "Sorry fot what" },
-      { id: 3, name: "Billy", message: "Our daddy told us not to be shamed of our dicks" },
    ],
 };
 

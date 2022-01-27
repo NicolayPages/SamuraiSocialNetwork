@@ -1,5 +1,5 @@
 import { stopSubmit } from 'redux-form';
-import { profileAPI } from './../api';
+import { profileAPI } from '../api';
 import { showError } from './errors-reducer';
 
 const ADD_POST = 'ADD-POST';
@@ -23,6 +23,9 @@ let initialState = {
    status: '',
    editMode: false,
 };
+
+
+
 
 const profileReducer = (state = initialState, action) => {
    switch (action.type) {

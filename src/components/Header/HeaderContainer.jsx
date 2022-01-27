@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getIsAuth, getLogin } from '../../redux/auth-selectors';
-import { authUserLogOut } from './../../redux/auth-reducer';
-import { getProfile } from './../../redux/profile-selectors';
-import { getUserProfile } from './../../redux/profile-reducer';
+import { authUserLogOut } from '../../redux/auth-reducer';
+import { getProfile } from '../../redux/profile-selectors';
+import { getUserProfile } from '../../redux/profile-reducer';
 import s from './Header.module.scss'
 import { Link } from 'react-router-dom';
 import userPhoto from '../../assets/images/user.png'
 import logo from '../../../src/assets/images/logo.png'
-import { getUserId } from './../../redux/auth-selectors';
+import { getUserId } from '../../redux/auth-selectors';
 import Preloader from '../common/Preloader/Preloader';
 import { compose } from 'redux';
 import { withRouter } from 'react-router';

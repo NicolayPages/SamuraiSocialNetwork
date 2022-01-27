@@ -20,8 +20,9 @@
 
 ### Test account
 
-Email: free@samuraijs.com
-Password: free
+#### Email: free@samuraijs.com
+
+#### Password: free
 
 
 

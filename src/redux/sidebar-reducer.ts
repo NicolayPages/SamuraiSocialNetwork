@@ -1,4 +1,18 @@
-let initialState = {
+type LinksType = {
+   id: number
+   adress: string
+   name: string
+}
+type FriendsType = {
+   id: number
+   name: string
+}
+type initialStateType = {
+   links: [] | Array<LinksType>
+   friends: [] | Array<FriendsType>
+}
+
+let initialState: initialStateType = {
    links: [
       { id: 1, adress: "profile", name: "Profile", },
       { id: 2, adress: "dialogs", name: "Dialogs", },
@@ -15,7 +29,7 @@ let initialState = {
 };
 
 
-const sidebarReducer = (state = initialState, action) => {
+const sidebarReducer = (state = initialState, action: any) => {
    return state;
 }
 

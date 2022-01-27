@@ -1,14 +1,17 @@
 import { authUserData } from './auth-reducer';
 import { showError } from './errors-reducer';
 
-
 const INITIALIZED_SUCCESS = 'INITIALIZED_SUCCESS';
 
-let initialState = {
+type initialStateType = {
+   initialized: boolean,
+}
+let initialState: initialStateType = {
    initialized: false,
 };
 
-const appReducer = (state = initialState, action) => {
+
+const appReducer = (state = initialState, action: any) => {
    switch (action.type) {
       case INITIALIZED_SUCCESS: {
          return {
@@ -21,18 +24,19 @@ const appReducer = (state = initialState, action) => {
    };
 };
 
+
 export const setInitialized = () => ({ type: INITIALIZED_SUCCESS, });
 
 
 export const initializedApp = () => {
-   return (dispatch) => {
+   return (dispatch: any) => {
       try {
          let promise = dispatch(authUserData());
          Promise.all([promise])
             .then(() => {
                dispatch(setInitialized());
             });
-      } catch (error) {
+      } catch (error: any) {
          dispatch(showError(error.message));
       }
    }
