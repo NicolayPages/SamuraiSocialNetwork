@@ -3,15 +3,13 @@ import { showError } from './errors-reducer';
 
 const INITIALIZED_SUCCESS = 'INITIALIZED_SUCCESS';
 
-type initialStateType = {
-   initialized: boolean,
-}
-let initialState: initialStateType = {
+let initialState = {
    initialized: false,
 };
+type initialStateType = typeof initialState
 
 
-const appReducer = (state = initialState, action: any) => {
+const appReducer = (state = initialState, action: any): initialStateType => {
    switch (action.type) {
       case INITIALIZED_SUCCESS: {
          return {
@@ -24,8 +22,12 @@ const appReducer = (state = initialState, action: any) => {
    };
 };
 
+type setInitializedType = {
+   type: typeof INITIALIZED_SUCCESS
+}
 
-export const setInitialized = () => ({ type: INITIALIZED_SUCCESS, });
+export const setInitialized = (): setInitializedType => ({ type: INITIALIZED_SUCCESS });
+
 
 
 export const initializedApp = () => {

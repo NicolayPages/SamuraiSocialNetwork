@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import s from './Sidebar.module.scss'
-import { NavLink } from 'react-router-dom';
 import Menu_link from './Menu_link/Menu_link';
 import Friends from './Friends/Friends';
+import { PropsType } from './SidebarContainer';
 
 
-const Sidebar = (props) => {
-  let menuElements = props.links.map(l => <Menu_link id={l.id} name={l.name} adress={l.adress} />)
+const Sidebar: React.FC<PropsType> = (props) => {
+  let menuElements = props.links.map(l => <Menu_link key={l.id} name={l.name} adress={l.adress} />)
   return (
     <nav className={s.Sidebar}>
       <ul className={s.Sidebar__list}>

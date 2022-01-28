@@ -2,15 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router';
 import { compose } from 'redux';
-import { getUserId } from '../../redux/auth-selectors';
+import { getUserId } from '../../selectors/auth-selectors';
 import Preloader from '../common/Preloader/Preloader';
 import { withAuthRedirect } from './../../hoc/withAuthRedirect';
 import { getStatus, getUserProfile, updateStatus, updatePhoto, onEditMode, offEditMode } from './../../redux/profile-reducer';
-import { getIsFetching, getProfile, getUserStatus } from './../../redux/profile-selectors';
+import { getIsFetching, getProfile, getUserStatus } from '../../selectors/profile-selectors';
 import { followUsers, getUsersTest, unfollowUsers } from './../../redux/users-reducer';
-import { getIsFollowing, getUsers } from './../../redux/users-selectors';
+import { getIsFollowing, getUsers } from '../../selectors/users-selectors';
 import Profile from './Profile';
-import { getIsAuth } from './../../redux/auth-selectors';
+import { getIsAuth } from '../../selectors/auth-selectors';
 
 
 class ProfileContainer extends React.Component {
@@ -42,7 +42,9 @@ class ProfileContainer extends React.Component {
       <>
         {this.props.isFetching ? <Preloader /> : null}
         < Profile {...this.props} isOwner={!this.props.match.params.userId} updatePhoto={this.props.updatePhoto}
-          editMode={this.props.editMode} onEditMode={this.props.onEditMode} isAuth={this.props.isAuth} />
+          editMode={this.props.editMode} onEditMode={this.props.onEditMode}
+          profile={this.props.profile}
+          isAuth={this.props.isAuth} />
       </>
     )
   };

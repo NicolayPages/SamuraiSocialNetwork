@@ -1,9 +1,9 @@
-type LinksType = {
+export type LinksType = {
    id: number
    adress: string
    name: string
 }
-type FriendsType = {
+export type FriendsType = {
    id: number
    name: string
 }
@@ -29,7 +29,7 @@ let initialState: initialStateType = {
 };
 
 
-const sidebarReducer = (state = initialState, action: any) => {
+const sidebarReducer = (state = initialState, action: any): initialStateType => {
    return state;
 }
 

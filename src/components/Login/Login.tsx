@@ -3,37 +3,45 @@ import s from './Login.module.scss';
 import { reduxForm, Field, reset } from 'redux-form';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { authUserLogIn } from './../../redux/auth-reducer';
+import { authUserLogIn } from '../../redux/auth-reducer';
 import { Input } from '../common/FormElements/FormElements';
 import { maxLengthCreator, required } from '../../utilits/validators/validators';
 import { Redirect } from 'react-router-dom';
-import { getIsAuth } from '../../redux/auth-selectors';
+import { getIsAuth } from '../../selectors/auth-selectors';
+import { AppStateType } from '../../redux/redux-store';
 
 const maxLength30 = maxLengthCreator(30)
 
-class LoginContainer extends React.Component {
-   constructor(props) {
-      super(props)
-   }
-   onSubmit = (formData, dispatch) => {
+type MapStateToPropsType = {
+   isAuth: boolean
+   captcha: string | null
+}
+type MapDispatchToPropsType = {
+   authUserLogIn: (email: string, password: string, rememberMe: boolean, captcha: string) => void
+}
+type PropsType = MapStateToPropsType & MapDispatchToPropsType
+
+
+
+class LoginContainer extends React.Component<PropsType> {
+   onSubmit = (formData: any, dispatch: any) => {
       this.props.authUserLogIn(formData.email, formData.password, formData.rememberMe, formData.captcha);
    };
    render() {
-
       if (this.props.isAuth) {
          return <Redirect to={'/profile'} />
       }
       return (
          <div className={s.container}>
             <h1 className={s.title}>Login</h1>
-            <LoginReduxForm onSubmit={this.onSubmit} captcha={this.props.captcha} />
+            <LoginReduxForm onSubmit={this.onSubmit} {...this.props} />
          </div>
       );
    };
 };
 
 
-const LoginForm = (props) => {
+const LoginForm: React.FC<any> = (props: any) => {
    return (
       <form className={s.form} onSubmit={props.handleSubmit}>
          <div>
@@ -67,7 +75,7 @@ const LoginForm = (props) => {
 
 const LoginReduxForm = reduxForm({ form: 'login' })(LoginForm)
 
-let mapStateToProps = (state) => {
+let mapStateToProps = (state: AppStateType): MapStateToPropsType => {
    return {
       isAuth: getIsAuth(state),
       captcha: state.auth.captcha,

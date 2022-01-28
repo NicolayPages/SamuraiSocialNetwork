@@ -1,6 +1,7 @@
 import { showError } from './errors-reducer';
 import { updateObjectInArray } from '../utilits/validators/object-helpers';
-import { usersAPI, profileAPI } from './../api';
+import { usersAPI, profileAPI } from '../api';
+import { UsersType } from '../types/types';
 
 const FOLLOW = 'FOLLOW';
 const UN_FOLLOW = 'UN_FOLLOW';
@@ -10,16 +11,24 @@ const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT';
 const IS_FETCHING = 'IS_FETCHING';
 const IS_FOLLOWING = 'IS_FOLLOWING';
 
+
+type FollowingType = {
+   isFollowing: boolean
+   userId: number
+}
+
 let initialState = {
-   users: [],
+   users: [] as Array<UsersType>,
    pageSize: 10,
    totalUserCount: 0,
    currentPage: 1,
    isFetching: false,
-   isFollowing: [],
+   isFollowing: [] as Array<FollowingType>,
 };
+type InitialStateType = typeof initialState
 
-const usersReducer = (state = initialState, action) => {
+
+const usersReducer = (state = initialState, action: any): InitialStateType => {
    switch (action.type) {
       case FOLLOW:
          return {
@@ -49,6 +58,7 @@ const usersReducer = (state = initialState, action) => {
             ...state, isFetching: action.isFetching
          };
       case IS_FOLLOWING:
+         debugger;
          return {
             ...state,
             isFollowing: action.isFollowing
@@ -60,16 +70,53 @@ const usersReducer = (state = initialState, action) => {
    }
 };
 
-export const follow = (userId) => ({ type: FOLLOW, userId });
-export const unfollow = (userId) => ({ type: UN_FOLLOW, userId });
-export const setUsers = (users) => ({ type: SET_USERS, users });
-export const setPage = (currentPage) => ({ type: SET_PAGE, currentPage });
-export const setTotalCount = (totalCount) => ({ type: SET_TOTAL_COUNT, totalCount });
-export const toggleIsFetching = (isFetching) => ({ type: IS_FETCHING, isFetching });
-export const toggleIsFollowing = (isFollowing, userId) => ({ type: IS_FOLLOWING, isFollowing, userId });
+type followActionType = {
+   type: typeof FOLLOW
+   userId: number
+}
+export const follow = (userId: number): followActionType => ({ type: FOLLOW, userId });
+
+type unfollowActionType = {
+   type: typeof UN_FOLLOW
+   userId: number
+}
+export const unfollow = (userId: number): unfollowActionType => ({ type: UN_FOLLOW, userId });
+
+type setUsersActionType = {
+   type: typeof SET_USERS
+   users: Array<UsersType>
+}
+export const setUsers = (users: Array<UsersType>): setUsersActionType => ({ type: SET_USERS, users });
+
+type setPageActionType = {
+   type: typeof SET_PAGE
+   currentPage: number
+}
+export const setPage = (currentPage: number): setPageActionType => ({ type: SET_PAGE, currentPage });
+
+type setTotalCountActionType = {
+   type: typeof SET_TOTAL_COUNT
+   totalCount: number
+}
+export const setTotalCount = (totalCount: number): setTotalCountActionType => ({ type: SET_TOTAL_COUNT, totalCount });
+
+type toggleIsFetchingActionType = {
+   type: typeof IS_FETCHING
+   isFetching: boolean
+}
+export const toggleIsFetching = (isFetching: boolean): toggleIsFetchingActionType => ({ type: IS_FETCHING, isFetching });
+
+type toggleIsFollowingActionType = {
+   type: typeof IS_FOLLOWING
+   isFollowing: boolean
+   userId: number
+}
+export const toggleIsFollowing = (isFollowing: boolean, userId: number): toggleIsFollowingActionType => ({ type: IS_FOLLOWING, isFollowing, userId });
 
 
-const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) => {
+
+
+const followUnfollowFlow = async (dispatch: any, userId: number, apiMethod: any, actionCreator: any) => {
    try {
       dispatch(toggleIsFollowing(true, userId));
       let data = await apiMethod(userId)
@@ -77,62 +124,62 @@ const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) =>
          dispatch(actionCreator(userId))
       }
       dispatch(toggleIsFollowing(false, userId));
-   } catch (error) {
+   } catch (error: any) {
       dispatch(showError(error.message));
    }
 };
 
-export const requestUsers = (currentPage, pageSize) => async (dispatch) => {
+export const requestUsers = (currentPage: number, pageSize: number) => async (dispatch: any) => {
    try {
       dispatch(toggleIsFetching(true));
       let data = await usersAPI.getUsers(currentPage, pageSize);
       dispatch(setUsers(data.items));
       dispatch(setTotalCount(data.totalCount));
       dispatch(toggleIsFetching(false));
-   } catch (error) {
+   } catch (error: any) {
       dispatch(showError(error.message));
    }
 };
 
-export const setUsersPage = (p, pageSize) => async (dispatch) => {
+export const setUsersPage = (p: number, pageSize: number) => async (dispatch: any) => {
    try {
       dispatch(setPage(p));
       dispatch(toggleIsFetching(true));
       let data = await usersAPI.getUsers(p, pageSize);
       dispatch(toggleIsFetching(false));
       dispatch(setUsers(data.items));
-   } catch (error) {
+   } catch (error: any) {
       dispatch(showError(error.message));
    }
 };
 
-export const followUsers = (userId) => {
-   return async (dispatch) => {
+export const followUsers = (userId: number) => {
+   return async (dispatch: any) => {
       try {
          followUnfollowFlow(dispatch, userId, usersAPI.followUser.bind(usersAPI), follow)
-      } catch (error) {
+      } catch (error: any) {
          dispatch(showError(error.message));
       }
    }
 };
 
-export const unfollowUsers = (userId) => {
-   return async (dispatch) => {
+export const unfollowUsers = (userId: number) => {
+   return async (dispatch: any) => {
       try {
          followUnfollowFlow(dispatch, userId, usersAPI.unfollowUser.bind(usersAPI), unfollow)
-      } catch (error) {
+      } catch (error: any) {
          dispatch(showError(error.message));
       }
    }
 };
 
-export const getUsersTest = () => async (dispatch) => {
+export const getUsersTest = () => async (dispatch: any) => {
    try {
       dispatch(toggleIsFetching(true));
       let data = await profileAPI.getUsersForProfile();
       dispatch(setUsers(data.items));
       dispatch(toggleIsFetching(false));
-   } catch (error) {
+   } catch (error: any) {
       dispatch(showError(error.message));
    }
 };

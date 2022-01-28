@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, reset } from 'redux-form';
 import s from './MessageForm.module.scss'
 import { compose } from 'redux';
-import { addMessageActionCreator } from './../../../redux/dialogs-reducer';
+import { addMessageActionCreator } from '../../../redux/dialogs-reducer';
 import { maxLengthCreator, required } from '../../../utilits/validators/validators';
-import { Textarea } from './../../common/FormElements/FormElements';
+import { Textarea } from '../../common/FormElements/FormElements';
+import { AppStateType } from '../../../redux/redux-store';
 
 const maxLength200 = maxLengthCreator(200);
 
-class MessageFormComponent extends React.Component {
-   constructor(props) {
-      super(props)
-   }
-   onAddMessage = (values, dispatch) => {
+
+
+class MessageFormComponent extends React.Component<any> {
+   onAddMessage = (values: any, dispatch: any) => {
       this.props.addMessageActionCreator(values.addNewMessage);
       dispatch(reset('MessageForm'));
    };
@@ -24,7 +24,7 @@ class MessageFormComponent extends React.Component {
    }
 }
 
-const MessageForm = (props) => {
+const MessageForm = (props: any) => {
    return (
       <form className={s.messageForm} onSubmit={props.handleSubmit}>
          <Field
@@ -40,7 +40,7 @@ const MessageForm = (props) => {
 
 
 
-let mapStateToProps = (state) => {
+let mapStateToProps = (state: any) => {
    return {
       newText: state.dialogsPage.messageNewText,
    }

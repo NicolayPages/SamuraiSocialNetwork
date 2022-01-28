@@ -7,9 +7,9 @@ import s from './Posts.module.scss'
 import { reduxForm, Field, reset } from 'redux-form';
 import { Textarea } from './../../common/FormElements/FormElements';
 import { maxLengthCreator, required } from '../../../utilits/validators/validators';
-import { getPosts } from '../../../redux/profile-selectors';
-import { getProfile } from './../../../redux/profile-selectors';
-import { getUserId } from './../../../redux/auth-selectors';
+import { getPosts } from '../../../selectors/profile-selectors';
+import { getProfile } from '../../../selectors/profile-selectors';
+import { getUserId } from '../../../selectors/auth-selectors';
 
 const maxLength200 = maxLengthCreator(200);
 

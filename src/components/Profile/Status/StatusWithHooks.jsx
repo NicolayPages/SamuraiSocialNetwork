@@ -3,8 +3,8 @@ import s from './Status.module.scss'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { updateStatus } from '../../../redux/profile-reducer';
-import { getProfile, getUserStatus } from '../../../redux/profile-selectors';
-import { getUserId } from './../../../redux/auth-selectors';
+import { getProfile, getUserStatus } from '../../../selectors/profile-selectors';
+import { getUserId } from '../../../selectors/auth-selectors';
 
 const Status = (props) => {
    let [editMode, setEditMode] = useState(false);

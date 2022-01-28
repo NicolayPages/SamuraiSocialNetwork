@@ -4,7 +4,7 @@ import dogIcon from '../../assets/images/corgi.png'
 import { Link } from 'react-router-dom';
 import ErrorPopup from '../common/ErrorPopup/ErrorPopup';
 
-const NotFound = (props) => {
+const NotFound = (props: any) => {
    return (
       <div className={s.wrapper}>
          <h1 className={s.title}>

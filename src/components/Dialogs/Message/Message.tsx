@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import s from './Message.module.scss'
 import userPhoto from '../../../assets/images/user.png'
 
-const Message = (props) => {
+type PropsType = {
+   name: string
+   message: string
+   id: number
+}
+
+const Message: React.FC<PropsType> = (props) => {
    return (
       <div className={s.message}>
          <div className={s.user}>

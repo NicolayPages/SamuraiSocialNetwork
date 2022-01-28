@@ -3,7 +3,7 @@ import s from './Status.module.scss'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { updateStatus } from './../../../redux/profile-reducer';
-import { getUserStatus } from '../../../redux/profile-selectors';
+import { getUserStatus } from '../../../selectors/profile-selectors';
 
 class Status extends React.Component {
    state = {

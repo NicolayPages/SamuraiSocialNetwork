@@ -6,7 +6,7 @@ import { Input } from '../../common/FormElements/FormElements';
 import s from './EditForm.module.scss'
 import { Textarea } from './../../common/FormElements/FormElements';
 import { updateProfile, offEditMode } from './../../../redux/profile-reducer';
-import { getProfile } from './../../../redux/profile-selectors';
+import { getProfile } from '../../../selectors/profile-selectors';
 
 
 const Settings = (props) => {

@@ -3,8 +3,11 @@ import s from './Dialogs.module.scss'
 import Dialog from './Dialog/Dialog';
 import Message from './Message/Message';
 import MessageFormComponent from './MessageForm/MessageFormContainer';
+import { PropsType } from './DialogsContainer';
 
-const Dialogs = (props) => {
+
+
+const Dialogs: React.FC<PropsType> = (props) => {
    let dialogElements = props.dialogs.map(d => <Dialog name={d.name} id={d.id} />);
    let messageElements = props.messages.map(m => <Message name={m.name} id={m.id} message={m.message} />);
    return (

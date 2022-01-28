@@ -4,8 +4,8 @@ import { requestUsers, setUsersPage, unfollowUsers, followUsers, getUsersTest } 
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
 import { compose } from "redux";
-import { getCurrentPage, getIsFetching, getIsFollowing, getPageSize, getTotalUserCount, getUsers } from "../../redux/users-selectors";
-import { getIsAuth } from './../../redux/auth-selectors';
+import { getCurrentPage, getIsFetching, getIsFollowing, getPageSize, getTotalUserCount, getUsers } from "../../selectors/users-selectors";
+import { getIsAuth } from '../../selectors/auth-selectors';
 
 class UsersContainer extends React.Component {
    constructor(props) {
