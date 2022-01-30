@@ -16,7 +16,7 @@ const Settings = (props) => {
    return (
       <div className={s.wrapper}>
          <div className={s.userSettings}>
-            <EditReduxForm initialValues={props.profile[0]} onSubmit={onSubmit} offEditMode={props.offEditMode} />
+            <EditReduxForm initialValues={props.profile} onSubmit={onSubmit} offEditMode={props.offEditMode} />
          </div>
       </div>
    );

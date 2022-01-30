@@ -29,9 +29,9 @@ class PostsComponent extends React.Component {
             onAddPost={this.onAddPost}
             deletePost={this.props.deletePost}
             likePost={this.props.likePost}
-            profileId={this.props.profile[0].userId}
+            profileId={this.props.profile.userId}
             authId={this.props.authId}
-            photo={this.props.profile[0].photos.small}
+            photo={this.props.profile.photos.small}
          />
       );
    }

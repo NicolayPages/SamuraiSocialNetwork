@@ -2,10 +2,39 @@ import React from "react";
 import s from "./Users.module.scss"
 import userPhoto from '../../assets/images/user.png'
 import { NavLink } from "react-router-dom";
-import Paginator from './../common/Paginator/Paginator';
+import Paginator from '../common/Paginator/Paginator';
+import { PhotosType, UsersType } from "../../types/types";
 
-const Users = (props) => {
-   let itemsArr = props.users.map(u => < UserItem
+
+type PropsUsersType = {
+   totalUserCount: number
+   pageSize: number
+   currentPage: number
+   users: Array<UsersType> | null | any
+   isFollowing: boolean
+   isAuth: boolean
+
+   onPageChanged: (p: number) => void
+   unfollowUsers: (id: number) => Promise<void>
+   followUsers: (id: number) => Promise<void>
+
+}
+
+type PropsItemsType = {
+   id: number
+   photos: PhotosType
+   isAuth: boolean
+   followed: boolean
+   isFollowing: any
+   status: string
+   name: string
+
+   unfollowUsers: (id: number) => Promise<void>
+   followUsers: (id: number) => Promise<void>
+}
+
+const Users: React.FC<PropsUsersType> = (props) => {
+   let itemsArr = props.users.map((u: any) => < UserItem
       key={u.id}
       unfollowUsers={props.unfollowUsers}
       followUsers={props.followUsers}
@@ -20,9 +49,6 @@ const Users = (props) => {
    return (
       <div className={s.wrapper}>
          {itemsArr}
-         <div className={s.wrapperBtn}>
-            <button className={s.loadUsersBtn} onClick={props.getUsersTest}>show more</button>
-         </div>
          <Paginator
             totalUserCount={props.totalUserCount}
             pageSize={props.pageSize}
@@ -32,7 +58,9 @@ const Users = (props) => {
    );
 };
 
-const UserItem = (props) => {
+
+
+const UserItem: React.FC<PropsItemsType> = (props) => {
    return (
       <div className={s.item} key={props.id}>
          <div className={s.head}>
@@ -44,13 +72,12 @@ const UserItem = (props) => {
             {props.isAuth &&
                <div>
                   {props.followed
-                     ? <button disabled={props.isFollowing.some(id => id === props.id)}
+                     ? <button disabled={props.isFollowing.some((id: number | null) => id === props.id)}
                         className={s.followedBtn} onClick={() => { props.unfollowUsers(props.id) }}>unfollow</button>
-                     : <button disabled={props.isFollowing.some(id => id === props.id)}
+                     : <button disabled={props.isFollowing.some((id: number | null) => id === props.id)}
                         className={s.followedBtn} onClick={() => { props.followUsers(props.id) }}>follow</button>}
                </div>
             }
-
          </div>
          <div className={s.info}>
             <div className={s.mainInfo}>

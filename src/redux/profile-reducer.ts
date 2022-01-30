@@ -12,6 +12,7 @@ const LIKE_POST = 'LIKE_POST';
 const SAVE_PHOTO_SUCCESS = 'SAVE_PHOTO_SUCCESS';
 const ON_EDIT_MODE = 'ON_EDIT_MODE';
 const OFF_EDIT_MODE = 'OFF_EDIT_MODE';
+const LOCAL_IS_FETCHING = 'LOCAL_IS_FETCHING';
 
 
 export type PostsType = {
@@ -26,10 +27,11 @@ let initialState = {
       { id: 2, message: "Hello everything", likes: 12, },
       { id: 3, message: "Goodbye", likes: 5, },
    ] as Array<PostsType>,
-   profile: null as Array<ProfileType> | null,
+   profile: null as ProfileType | null,
    isFetching: false,
    status: '',
    editMode: false,
+   localIsFetching: false
 };
 type InitialStateType = typeof initialState;
 
@@ -49,11 +51,15 @@ const profileReducer = (state = initialState, action: any): InitialStateType => 
          };
       };
       case SET_USER_PROFILE: {
-         return { ...state, profile: [action.profile], }
+         return { ...state, profile: action.profile, }
       };
       case IS_FETCHING:
          return {
             ...state, isFetching: action.isFetching
+         };
+      case LOCAL_IS_FETCHING:
+         return {
+            ...state, localIsFetching: action.localIsFetching
          };
       case SET_STATUS:
          return {
@@ -78,7 +84,7 @@ const profileReducer = (state = initialState, action: any): InitialStateType => 
       case SAVE_PHOTO_SUCCESS:
          return {
             ...state,
-            profile: [{ ...state.profile, photos: action.photosFiles } as ProfileType],
+            profile: { ...state.profile, photos: action.photosFiles } as ProfileType,
          };
       case ON_EDIT_MODE:
          return {
@@ -139,6 +145,11 @@ type setPhotoActionType = {
 }
 export const setPhoto = (photosFiles: PhotosType): setPhotoActionType => ({ type: SAVE_PHOTO_SUCCESS, photosFiles });
 
+type toggleIsLocalFetchingActionType = {
+   type: typeof LOCAL_IS_FETCHING
+   localIsFetching: boolean
+}
+export const toggleLocalIsFetching = (localIsFetching: boolean): toggleIsLocalFetchingActionType => ({ type: LOCAL_IS_FETCHING, localIsFetching });
 
 type onEditModeActionType = {
    type: typeof ON_EDIT_MODE
@@ -150,6 +161,9 @@ type offEditModeActionType = {
    type: typeof OFF_EDIT_MODE
 }
 export const offEditMode = (): offEditModeActionType => ({ type: OFF_EDIT_MODE });
+
+
+
 
 
 
@@ -178,10 +192,12 @@ export const updateStatus = (status: string) => async (dispatch: any) => {
 
 export const updatePhoto = (photoFile: PhotosType) => async (dispatch: any) => {
    try {
+      dispatch(toggleLocalIsFetching(true))
       let response = await profileAPI.updatePhoto(photoFile)
       if (response.data.resultCode === 0) {
          dispatch(setPhoto(response.data.data.photos));
       }
+      dispatch(toggleLocalIsFetching(false))
    } catch (error: any) {
       dispatch(showError(error.message));
    }

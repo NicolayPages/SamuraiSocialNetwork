@@ -29,7 +29,7 @@ const Status = (props) => {
       <div>
          {!editMode &&
             <div className={s.status}>
-               <p onDoubleClick={props.authId == props.profile[0].userId && activateEditMode}>
+               <p onDoubleClick={props.authId == props.profile.userId && activateEditMode}>
                   {props.status || '--------------'}</p>
             </div>
          }

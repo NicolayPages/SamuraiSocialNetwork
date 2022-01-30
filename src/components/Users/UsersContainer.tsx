@@ -1,20 +1,40 @@
 import React from "react";
 import { connect } from "react-redux";
-import { requestUsers, setUsersPage, unfollowUsers, followUsers, getUsersTest } from "../../redux/users-reducer";
+import { requestUsers, setUsersPage, unfollowUsers, followUsers, } from "../../redux/users-reducer";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
 import { compose } from "redux";
 import { getCurrentPage, getIsFetching, getIsFollowing, getPageSize, getTotalUserCount, getUsers } from "../../selectors/users-selectors";
 import { getIsAuth } from '../../selectors/auth-selectors';
+import { UsersType } from "../../types/types";
+import { AppStateType } from "../../redux/redux-store";
 
-class UsersContainer extends React.Component {
-   constructor(props) {
-      super(props);
-   };
+
+type MapStateToPropsType = {
+   users: Array<UsersType> | any
+   pageSize: number
+   totalUserCount: number
+   currentPage: number
+   isFetching: boolean
+   isFollowing: any
+   isAuth: boolean
+}
+type MapDispatchToPropsType = {
+   requestUsers: (currentPage: number, pageSize: number) => void
+   setUsersPage: (p: number, pageSize: number) => void
+   unfollowUsers: (id: number) => Promise<void>
+   followUsers: (id: number) => Promise<void>
+   toggleIsFollowing: () => void
+   onPageChanged: (p: number) => void
+}
+export type PropsType = MapStateToPropsType & MapDispatchToPropsType
+
+
+class UsersContainer extends React.Component<PropsType> {
    componentDidMount() {
       this.props.requestUsers(this.props.currentPage, this.props.pageSize);
    };
-   onPageChanged = (p) => {
+   onPageChanged = (p: number) => {
       this.props.setUsersPage(p, this.props.pageSize);
    };
    render() {
@@ -26,13 +46,9 @@ class UsersContainer extends React.Component {
             currentPage={this.props.currentPage}
             onPageChanged={this.onPageChanged}
             users={this.props.users}
-            follow={this.props.follow}
-            unfollow={this.props.unfollow}
             isFollowing={this.props.isFollowing}
-            toggleIsFollowing={this.props.toggleIsFollowing}
             unfollowUsers={this.props.unfollowUsers}
             followUsers={this.props.followUsers}
-            getUsersTest={this.props.getUsersTest}
             isAuth={this.props.isAuth}
          />
       </>
@@ -40,7 +56,11 @@ class UsersContainer extends React.Component {
    };
 };
 
-let mapStateToProps = (state) => {
+
+
+
+
+let mapStateToProps = (state: AppStateType): MapStateToPropsType => {
    return {
       users: getUsers(state),
       pageSize: getPageSize(state),
@@ -52,9 +72,8 @@ let mapStateToProps = (state) => {
    };
 };
 
-
 export default compose(
-   connect(mapStateToProps, { requestUsers, setUsersPage, unfollowUsers, followUsers, getUsersTest }),
+   connect(mapStateToProps, { requestUsers, setUsersPage, unfollowUsers, followUsers, }),
 )(UsersContainer);
 
 

@@ -2,14 +2,34 @@ import React, { useState } from 'react';
 import s from './User.module.scss'
 import Status from '../Status/StatusWithHooks';
 import userPhoto from '../../../assets/images/user.png'
+import loading from '../../../assets/images/preloader.gif'
 import loadIcon from '../../../assets/images/download.png'
 import yes from '../../../assets/images/yes.png'
 import no from '../../../assets/images/no.png'
 import EditForm from '../EditForm/EditForm';
+import { ProfileType } from '../../../types/types';
+
+type PropsType = {
+   updatePhoto: any
+   onEditMode: () => void
+   followUsers: (id: number | null) => void
+   unfollowUsers: (id: number | null) => void
+   updateStatus: () => void
+
+   isFollowing: any
+   isFetching: boolean
+   isOwner: boolean
+   editMode: boolean
+   profile: any
+   status: string | null
+   authId: number | null
+   id: null | number
+   localIsFetching: boolean
+}
 
 
-const User = (props) => {
-   let onPhotoUpload = (e) => {
+const User: React.FC<PropsType> = (props) => {
+   let onPhotoUpload = (e: any) => {
       if (e.target.files.length) {
          props.updatePhoto(e.target.files[0]);
       }
@@ -17,13 +37,14 @@ const User = (props) => {
 
    return (
       <div className={s.User}>
-         <div>
+         <div className={s.container}>
             <div className={s.User__ava}>
-               <img src={props.profile.photos.large || userPhoto} alt="" />
+               {!props.localIsFetching ? <img src={props.profile.photos.large || userPhoto} alt="" className={s.ava} />
+                  : <img src={loading} className={s.loader} alt="" />}
             </div>
             {props.isOwner && <div className={s.input__wrapper}>
                <input type="file" id="input__file" className={s.input__file} multiple onChange={onPhotoUpload} />
-               <label for="input__file" className={s.input__fileButton}>
+               <label htmlFor="input__file" className={s.input__fileButton}>
                   <span className={s.input__fileIconWrapper}><img className={s.input__fileIcon} src={loadIcon} width="20" /></span>
                   <span className={s.input__fileButtonText}>Download Avatar</span>
                </label>
@@ -31,9 +52,9 @@ const User = (props) => {
             {props.isOwner && <button className={s.btn} onClick={props.onEditMode}>Edit Profile</button>}
             {!props.isOwner && <div className={s.btnContainer}>
                {false
-                  ? <button disabled={props.isFollowing.some(id => id === props.id)}
+                  ? <button disabled={props.isFollowing.some((id: number) => id === props.id)}
                      className={s.btn} onClick={() => { props.unfollowUsers(props.id) }}>unfollow</button>
-                  : <button disabled={props.isFollowing.some(id => id === props.id)}
+                  : <button disabled={props.isFollowing.some((id: number) => id === props.id)}
                      className={s.btn} onClick={() => { props.followUsers(props.id) }}>follow</button>}
             </div>}
          </div>
@@ -68,8 +89,13 @@ const User = (props) => {
    );
 }
 
-const Contact = ({ contactTitle, contactValue }) => {
-   return <li>{contactTitle} : <a href={contactValue} className={s.link} target='_blank'>{contactValue || '--------------------'}</a></li>
+type ContactType = {
+   contactTitle: string | null
+   contactValue: any
+
+}
+const Contact: React.FC<ContactType> = (props) => {
+   return <li>{props.contactTitle} :<a href={props.contactValue} className={s.link} target='_blank'>{props.contactValue || '--------------------'}</a></li>
 }
 
 export default User;

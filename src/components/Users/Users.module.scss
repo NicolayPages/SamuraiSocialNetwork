@@ -1,32 +1,7 @@
 .wrapper {
-   padding: 0px 20px 0 10px;
+   padding: 10px 20px 0 10px;
    max-width: 1100px;
    overflow-x: hidden;
-}
-.wrapperBtn {
-   display: flex;
-   justify-content: center;
-   margin: 10px 0px 30px 0px;
-}
-.loadUsersBtn {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   height: 60px;
-   padding: 0 30px;
-   font-size: 26px;
-   text-transform: uppercase;
-   background-color: #ad66d5;
-   color: #fff;
-   border-radius: 10px;
-   font-weight: 500;
-   box-shadow: 0px 1px 8px -1px rgba(34, 60, 80, 0.2);
-   position: relative;
-   top: 0;
-   &:active {
-      box-shadow: 0px 1px 8px -1px rgba(34, 60, 80, 0.2);
-      top: 1px;
-   }
 }
 
 .item {
