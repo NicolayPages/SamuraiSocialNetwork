@@ -4,8 +4,20 @@ import { compose } from 'redux';
 import { deactivateMode } from '../../../redux/errors-reducer';
 import s from './ErrorPopup.module.scss';
 import errorIcon from '../../../assets/images/error.jpg'
+import { AppStateType } from '../../../redux/redux-store';
 
-const ErrorPopup = (props) => {
+
+type MapStateToProps = {
+   errorMessage: string | null
+}
+type MapDispatchToProps = {
+   deactivateMode: () => void
+}
+
+type PropsType = MapStateToProps & MapDispatchToProps
+
+
+const ErrorPopup: React.FC<PropsType> = (props) => {
    let deactivateMode = () => {
       props.deactivateMode();
    }
@@ -28,7 +40,7 @@ const ErrorPopup = (props) => {
 
 
 
-let mapStateToProps = (state) => {
+let mapStateToProps = (state: AppStateType): MapStateToProps => {
    return {
       errorMessage: state.errors.errorMessage,
    }

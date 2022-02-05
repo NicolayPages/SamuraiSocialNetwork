@@ -2,7 +2,12 @@ import React from 'react';
 import s from './FormElements.module.scss'
 
 
-export const Textarea = ({ input, meta, ...props }) => {
+type PropsType = {
+   input: any
+   meta: any
+}
+
+export const Textarea: React.FC<PropsType> = ({ input, meta, ...props }) => {
    const hasError = meta.touched && meta.error;
    return (
       <div className={s.formControl + ' ' + (hasError ? s.error : '')}>
@@ -12,7 +17,7 @@ export const Textarea = ({ input, meta, ...props }) => {
    );
 };
 
-export const Input = ({ input, meta, ...props }) => {
+export const Input: React.FC<PropsType> = ({ input, meta, ...props }) => {
    const hasError = meta.touched && meta.error;
    return (
       <div className={s.formControl + ' ' + (hasError ? s.error : '')}>

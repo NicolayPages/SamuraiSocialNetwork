@@ -5,33 +5,53 @@ import { addPostActionCreator, deletePost, likePost } from '../../../redux/profi
 import Post from './Post/Post';
 import s from './Posts.module.scss'
 import { reduxForm, Field, reset } from 'redux-form';
-import { Textarea } from './../../common/FormElements/FormElements';
+import { Textarea } from '../../common/FormElements/FormElements';
 import { maxLengthCreator, required } from '../../../utilits/validators/validators';
 import { getPosts } from '../../../selectors/profile-selectors';
 import { getProfile } from '../../../selectors/profile-selectors';
 import { getUserId } from '../../../selectors/auth-selectors';
+import { PhotosType, ProfileType } from '../../../types/types';
+import { AppStateType } from '../../../redux/redux-store';
 
 const maxLength200 = maxLengthCreator(200);
 
-class PostsComponent extends React.Component {
-   constructor(props) {
-      super(props)
-   }
-   onAddPost = (values, dispatch,) => {
+type MapStateToProps = {
+   posts: any
+   profile: ProfileType | null
+   authId: number | null
+}
+type MapDispatchToProps = {
+   addPostActionCreator: (postsFormMessage: any) => void
+   deletePost: (id: number) => void
+   likePost: (id: number, like: number) => void
+   onAddPost: (values: any, dispatch: any) => void
+}
+type PostsType = {
+   posts: any
+   authId: number | null
+   profile: ProfileType | null
+
+   likePost: (id: number, like: number) => void
+   deletePost: (id: number) => void
+   onAddPost: (values: any, dispatch: any) => void
+}
+type PropsType = MapStateToProps & MapDispatchToProps
+
+
+class PostsComponent extends React.Component<any> {
+   onAddPost = (values: any, dispatch: any,) => {
       this.props.addPostActionCreator(values.postsFormMessage,);
       dispatch(reset("postsForm"));
    };
    render() {
       return (
          <Posts
+            profile={this.props.profile}
             posts={this.props.posts}
-            ava={this.props.ava}
             onAddPost={this.onAddPost}
             deletePost={this.props.deletePost}
             likePost={this.props.likePost}
-            profileId={this.props.profile.userId}
             authId={this.props.authId}
-            photo={this.props.profile.photos.small}
          />
       );
    }
@@ -39,12 +59,13 @@ class PostsComponent extends React.Component {
 
 
 
-const Posts = (props) => {
-   let postElements = props.posts.map(p => <Post likePost={props.likePost} deletePost={props.deletePost} id={p.id} message={p.message} likes={p.likes} photo={props.photo} profileId={props.profileId} authId={props.authId} />);
+const Posts: React.FC<PostsType> = (props) => {
+   let postElements = props.posts.map((p: any) => <Post profile={props.profile} likePost={props.likePost}
+      deletePost={props.deletePost} id={p.id} message={p.message} likes={p.likes} authId={props.authId} />);
    return (
       <div className={s.Posts}>
          <h2 className={s.Posts__title}>My posts</h2>
-         {props.profileId == props.authId && <PostsReduxForm onSubmit={props.onAddPost} />}
+         {props.profile?.userId == props.authId && <PostsReduxForm onSubmit={props.onAddPost} />}
          <div className={s.Posts__wrapper}>
             {postElements}
          </div>
@@ -52,7 +73,7 @@ const Posts = (props) => {
    );
 };
 
-const PostsForm = (props) => {
+const PostsForm: React.FC<any> = (props) => {
 
    return (
       <form className={s.Posts__sending} onSubmit={props.handleSubmit}>
@@ -71,8 +92,7 @@ const PostsForm = (props) => {
 
 const PostsReduxForm = reduxForm({ form: 'postsForm', })(PostsForm);
 
-
-let mapStateToProps = (state) => {
+let mapStateToProps = (state: AppStateType): MapStateToProps => {
    return {
       posts: getPosts(state),
       profile: getProfile(state),

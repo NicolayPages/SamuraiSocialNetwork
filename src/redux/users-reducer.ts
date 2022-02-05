@@ -23,10 +23,13 @@ let initialState = {
    totalUserCount: 0,
    currentPage: 1,
    isFetching: false,
-   isFollowing: [] as Array<FollowingType>,
+   isFollowing: [] as Array<FollowingType> | [],
 };
+
 type InitialStateType = typeof initialState
 
+
+type ActionType = followActionType | unfollowActionType | setUsersActionType | setPageActionType | setTotalCountActionType | toggleIsFetchingActionType | toggleIsFollowingActionType
 
 const usersReducer = (state = initialState, action: any): InitialStateType => {
    switch (action.type) {
@@ -58,7 +61,6 @@ const usersReducer = (state = initialState, action: any): InitialStateType => {
             ...state, isFetching: action.isFetching
          };
       case IS_FOLLOWING:
-         debugger;
          return {
             ...state,
             isFollowing: action.isFollowing
@@ -112,6 +114,9 @@ type toggleIsFollowingActionType = {
    userId: number
 }
 export const toggleIsFollowing = (isFollowing: boolean, userId: number): toggleIsFollowingActionType => ({ type: IS_FOLLOWING, isFollowing, userId });
+
+
+
 
 
 

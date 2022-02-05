@@ -1,7 +1,10 @@
+import { Dispatch } from 'redux';
 import { stopSubmit } from 'redux-form';
-import { profileAPI } from '../api';
+import { ThunkAction } from 'redux-thunk';
+import { profileAPI, ResultCodeEnum } from '../api';
 import { PhotosType, ProfileType } from '../types/types';
 import { showError } from './errors-reducer';
+import { AppStateType } from './redux-store';
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
@@ -35,9 +38,9 @@ let initialState = {
 };
 type InitialStateType = typeof initialState;
 
+type ActionTypes = addPostActionCreatorType | setUserProfileActionType | toggleIsFetchingActionType | setStatusActionType | deletePostActionType | likePostActionType | setPhotoActionType | toggleIsLocalFetchingActionType | onEditModeActionType | offEditModeActionType
 
-
-const profileReducer = (state = initialState, action: any): InitialStateType => {
+const profileReducer = (state = initialState, action: ActionTypes): InitialStateType => {
    switch (action.type) {
       case ADD_POST: {
          let newPost = {
@@ -122,7 +125,7 @@ export const toggleIsFetching = (isFetching: boolean): toggleIsFetchingActionTyp
 
 type setStatusActionType = {
    type: typeof SET_STATUS
-   status: string | null
+   status: string
 }
 export const setStatus = (status: string): setStatusActionType => ({ type: SET_STATUS, status, });
 
@@ -165,24 +168,24 @@ export const offEditMode = (): offEditModeActionType => ({ type: OFF_EDIT_MODE }
 
 
 
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
-
-export const getUserProfile = (userId: number) => async (dispatch: any) => {
+export const getUserProfile = (userId: number): ThunkType => async (dispatch) => {
    dispatch(toggleIsFetching(true));
-   let data = await profileAPI.getProfile(userId);
-   dispatch(setUserProfile(data));
+   let response = await profileAPI.getProfile(userId);
+   dispatch(setUserProfile(response.data));
    dispatch(toggleIsFetching(false));
 };
 
-export const getStatus = (userId: number) => async (dispatch: any) => {
+export const getStatus = (userId: number): ThunkType => async (dispatch) => {
    let response = await profileAPI.getStatus(userId);
    dispatch(setStatus(response.data));
 };
 
-export const updateStatus = (status: string) => async (dispatch: any) => {
+export const updateStatus = (status: string): ThunkType => async (dispatch) => {
    try {
       let response = await profileAPI.updateStatus(status)
-      if (response.data.resultCode === 0) {
+      if (response.data.resultCode === ResultCodeEnum.Success) {
          dispatch(setStatus(status));
       }
    } catch (error: any) {
@@ -190,11 +193,11 @@ export const updateStatus = (status: string) => async (dispatch: any) => {
    }
 };
 
-export const updatePhoto = (photoFile: PhotosType) => async (dispatch: any) => {
+export const updatePhoto = (photoFile: PhotosType): ThunkType => async (dispatch) => {
    try {
       dispatch(toggleLocalIsFetching(true))
       let response = await profileAPI.updatePhoto(photoFile)
-      if (response.data.resultCode === 0) {
+      if (response.data.resultCode === ResultCodeEnum.Success) {
          dispatch(setPhoto(response.data.data.photos));
       }
       dispatch(toggleLocalIsFetching(false))
@@ -203,11 +206,11 @@ export const updatePhoto = (photoFile: PhotosType) => async (dispatch: any) => {
    }
 };
 
-export const updateProfile = (profileData: ProfileType) => async (dispatch: any, getState: any) => {
+export const updateProfile = (profileData: ProfileType): ThunkType => async (dispatch, getState: any) => {
    try {
       const userId = getState().auth.userId
       let response = await profileAPI.updateProfile(profileData)
-      if (response.data.resultCode === 0) {
+      if (response.data.resultCode === ResultCodeEnum.Success) {
          dispatch(getUserProfile(userId));
          dispatch(offEditMode());
       } else {

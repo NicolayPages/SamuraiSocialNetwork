@@ -1,6 +1,8 @@
-import { authAPI, securityAPI } from '../api';
+import { authAPI, ResultCodeEnum, securityAPI } from '../api';
 import { showError } from './errors-reducer';
 import { stopSubmit } from 'redux-form';
+import { ThunkAction } from 'redux-thunk';
+import { AppStateType } from './redux-store';
 
 
 const SET_USER_DATA = 'SET_USER_DATA';
@@ -18,7 +20,7 @@ let initialState = {
 type initialStateType = typeof initialState
 
 
-const authReducer = (state = initialState, action: any): initialStateType => {
+const authReducer = (state = initialState, action: ActionTypes): initialStateType => {
    switch (action.type) {
       case SET_USER_DATA: {
          return {
@@ -45,12 +47,16 @@ const authReducer = (state = initialState, action: any): initialStateType => {
 };
 
 
+type ActionTypes = setAuthUserDataActionType | setAuthLoginActionType | setAuthLogoutActionType | setSecurityCaptchaActionType
+
+
+
 type setAuthUserDataActionType = {
    type: typeof SET_USER_DATA,
    data: { userId: number | null, email: string | null, login: string | null, captcha: string | null }
 }
-export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, captcha: string | null): setAuthUserDataActionType =>
-   ({ type: SET_USER_DATA, data: { userId, email, login, captcha } });
+export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, captcha: string | null)
+   : setAuthUserDataActionType => ({ type: SET_USER_DATA, data: { userId, email, login, captcha } });
 
 
 type setAuthLoginActionType = {
@@ -73,16 +79,16 @@ type setSecurityCaptchaActionType = {
    type: typeof SET_CAPTCHA
    captcha: string | null
 }
-export const setSecurityCaptcha = (captcha: string | null): setSecurityCaptchaActionType =>
+export const setSecurityCaptcha = (captcha: string): setSecurityCaptchaActionType =>
    ({ type: SET_CAPTCHA, captcha });
 
 
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
 
-
-export const authUserData = () => async (dispatch: any) => {
+export const authUserData = (): ThunkType => async (dispatch) => {
    try {
       let data = await authAPI.getUserData();
-      if (data.resultCode === 0) {
+      if (data.resultCode === ResultCodeEnum.Success) {
          let { id, email, login, captcha } = data.data;
          dispatch(setAuthUserData(id, email, login, captcha));
       }
@@ -91,13 +97,13 @@ export const authUserData = () => async (dispatch: any) => {
    }
 };
 
-export const authUserLogIn = (email: string | null, password: string | null, rememberMe: boolean, captcha: any) => async (dispatch: any) => {
+export const authUserLogIn = (email: string, password: string, rememberMe: boolean, captcha: string | null): ThunkType => async (dispatch: any) => {
    try {
       let data = await authAPI.logInUser(email, password, rememberMe, captcha)
-      if (data.resultCode == 0) {
+      if (data.resultCode == ResultCodeEnum.Success) {
          dispatch(authUserData())
       } else {
-         if (data.resultCode == 10) {
+         if (data.resultCode == ResultCodeEnum.CaptchaIsRequired) {
             dispatch(getCapthchaUrl())
          }
          let errorMessage = data.messages.length > 0 ? data.messages[0] : "Some error";
@@ -109,10 +115,10 @@ export const authUserLogIn = (email: string | null, password: string | null, rem
 
 };
 
-export const authUserLogOut = () => async (dispatch: any) => {
+export const authUserLogOut = (): ThunkType => async (dispatch) => {
    try {
       let data = await authAPI.logOutUser();
-      if (data.resultCode == 0) {
+      if (data.resultCode == ResultCodeEnum.Success) {
          dispatch(setAuthLogout(null, null, null, false));
       }
    } catch (error: any) {
@@ -120,11 +126,10 @@ export const authUserLogOut = () => async (dispatch: any) => {
    }
 };
 
-export const getCapthchaUrl = () => async (dispatch: any) => {
+export const getCapthchaUrl = (): ThunkType => async (dispatch) => {
    try {
       let data = await securityAPI.getCaptcha();
-      const captchaUrl = data.data.url;
-      dispatch(setSecurityCaptcha(captchaUrl));
+      dispatch(setSecurityCaptcha(data.url));
    } catch (error: any) {
       dispatch(showError(error.message));
    }
