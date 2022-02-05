@@ -61,7 +61,7 @@ class PostsComponent extends React.Component<any> {
 
 const Posts: React.FC<PostsType> = (props) => {
    let postElements = props.posts.map((p: any) => <Post profile={props.profile} likePost={props.likePost}
-      deletePost={props.deletePost} id={p.id} message={p.message} likes={p.likes} authId={props.authId} />);
+      deletePost={props.deletePost} id={p.id} key={p.id} message={p.message} likes={p.likes} authId={props.authId} />);
    return (
       <div className={s.Posts}>
          <h2 className={s.Posts__title}>My posts</h2>
