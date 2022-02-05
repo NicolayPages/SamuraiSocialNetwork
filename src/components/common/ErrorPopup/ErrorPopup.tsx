@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { deactivateMode } from '../../../redux/errors-reducer';
+import { actions } from '../../../redux/errors-reducer';
 import s from './ErrorPopup.module.scss';
 import errorIcon from '../../../assets/images/error.jpg'
 import { AppStateType } from '../../../redux/redux-store';
@@ -47,6 +47,6 @@ let mapStateToProps = (state: AppStateType): MapStateToProps => {
 }
 
 export default compose(
-   connect(mapStateToProps, { deactivateMode }),
+   connect(mapStateToProps, { ...actions }),
 )(ErrorPopup)
 

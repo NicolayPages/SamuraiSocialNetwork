@@ -11,7 +11,9 @@ const Profile: React.FC<any> = React.memo((props) => {
   if (!props.profile) {
     return <Preloader />
   }
-
+  if (props.isFetching) {
+    return <Preloader />
+  }
   return (
     <div className={s.Profile}>
       <div>

@@ -4,18 +4,7 @@ import { ThunkAction } from 'redux-thunk';
 import { profileAPI, ResultCodeEnum } from '../api';
 import { PhotosType, ProfileType } from '../types/types';
 import { showError } from './errors-reducer';
-import { AppStateType } from './redux-store';
-
-const ADD_POST = 'ADD-POST';
-const SET_USER_PROFILE = 'SET_USER_PROFILE';
-const IS_FETCHING = 'IS_FETCHING';
-const SET_STATUS = 'SET_STATUS';
-const DELETE_POST = 'DELETE-POST';
-const LIKE_POST = 'LIKE_POST';
-const SAVE_PHOTO_SUCCESS = 'SAVE_PHOTO_SUCCESS';
-const ON_EDIT_MODE = 'ON_EDIT_MODE';
-const OFF_EDIT_MODE = 'OFF_EDIT_MODE';
-const LOCAL_IS_FETCHING = 'LOCAL_IS_FETCHING';
+import { AppStateType, InferActionsTypes } from './redux-store';
 
 
 export type PostsType = {
@@ -23,6 +12,7 @@ export type PostsType = {
    message: string
    likes: number
 }
+type ActionTypes = InferActionsTypes<typeof actions>
 
 let initialState = {
    posts: [
@@ -36,13 +26,11 @@ let initialState = {
    editMode: false,
    localIsFetching: false
 };
+
 type InitialStateType = typeof initialState;
-
-type ActionTypes = addPostActionCreatorType | setUserProfileActionType | toggleIsFetchingActionType | setStatusActionType | deletePostActionType | likePostActionType | setPhotoActionType | toggleIsLocalFetchingActionType | onEditModeActionType | offEditModeActionType
-
 const profileReducer = (state = initialState, action: ActionTypes): InitialStateType => {
    switch (action.type) {
-      case ADD_POST: {
+      case 'ADD_POST': {
          let newPost = {
             id: state.posts.length + 1,
             message: action.postMessage,
@@ -53,28 +41,28 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
             posts: [newPost, ...state.posts],
          };
       };
-      case SET_USER_PROFILE: {
+      case 'SET_USER_PROFILE': {
          return { ...state, profile: action.profile, }
       };
-      case IS_FETCHING:
+      case 'IS_FETCHING':
          return {
             ...state, isFetching: action.isFetching
          };
-      case LOCAL_IS_FETCHING:
+      case 'LOCAL_IS_FETCHING':
          return {
             ...state, localIsFetching: action.localIsFetching
          };
-      case SET_STATUS:
+      case 'SET_STATUS':
          return {
             ...state,
             status: action.status
          };
-      case DELETE_POST:
+      case 'DELETE_POST':
          return {
             ...state,
             posts: state.posts.filter(p => p.id != action.postId),
          };
-      case LIKE_POST:
+      case 'LIKE_POST':
          return {
             ...state,
             posts: state.posts.map(p => {
@@ -84,17 +72,17 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
                return p;
             }),
          };
-      case SAVE_PHOTO_SUCCESS:
+      case 'SAVE_PHOTO_SUCCESS':
          return {
             ...state,
             profile: { ...state.profile, photos: action.photosFiles } as ProfileType,
          };
-      case ON_EDIT_MODE:
+      case 'ON_EDIT_MODE':
          return {
             ...state,
             editMode: true,
          };
-      case OFF_EDIT_MODE:
+      case 'OFF_EDIT_MODE':
          return {
             ...state,
             editMode: false,
@@ -105,65 +93,19 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
 };
 
 
-type addPostActionCreatorType = {
-   type: typeof ADD_POST
-   postMessage: string
+export const actions = {
+   addPostActionCreator: (postMessage: string) => ({ type: 'ADD_POST', postMessage } as const),
+   setUserProfile: (profile: ProfileType) => ({ type: 'SET_USER_PROFILE', profile, } as const),
+   toggleIsFetching: (isFetching: boolean) => ({ type: 'IS_FETCHING', isFetching } as const),
+   setStatus: (status: string) => ({ type: 'SET_STATUS', status, } as const),
+   deletePost: (postId: number) => ({ type: 'DELETE_POST', postId } as const),
+   likePost: (postId: number, postLike: number) => ({ type: 'LIKE_POST', postId, postLike } as const),
+   setPhoto: (photosFiles: PhotosType) => ({ type: 'SAVE_PHOTO_SUCCESS', photosFiles } as const),
+   toggleLocalIsFetching: (localIsFetching: boolean) => ({ type: 'LOCAL_IS_FETCHING', localIsFetching } as const),
+   onEditMode: () => ({ type: 'ON_EDIT_MODE' } as const),
+   offEditMode: () => ({ type: 'OFF_EDIT_MODE' } as const),
 }
-export const addPostActionCreator = (postMessage: string): addPostActionCreatorType => ({ type: ADD_POST, postMessage });
 
-type setUserProfileActionType = {
-   type: typeof SET_USER_PROFILE
-   profile: ProfileType
-}
-export const setUserProfile = (profile: ProfileType): setUserProfileActionType => ({ type: SET_USER_PROFILE, profile, });
-
-type toggleIsFetchingActionType = {
-   type: typeof IS_FETCHING
-   isFetching: boolean
-}
-export const toggleIsFetching = (isFetching: boolean): toggleIsFetchingActionType => ({ type: IS_FETCHING, isFetching });
-
-type setStatusActionType = {
-   type: typeof SET_STATUS
-   status: string
-}
-export const setStatus = (status: string): setStatusActionType => ({ type: SET_STATUS, status, });
-
-type deletePostActionType = {
-   type: typeof DELETE_POST
-   postId: number
-}
-export const deletePost = (postId: number): deletePostActionType => ({ type: DELETE_POST, postId });
-
-type likePostActionType = {
-   type: typeof LIKE_POST
-   postId: number
-   postLike: number
-}
-export const likePost = (postId: number, postLike: number): likePostActionType => ({ type: LIKE_POST, postId, postLike });
-
-type setPhotoActionType = {
-   type: typeof SAVE_PHOTO_SUCCESS
-   photosFiles: PhotosType
-}
-export const setPhoto = (photosFiles: PhotosType): setPhotoActionType => ({ type: SAVE_PHOTO_SUCCESS, photosFiles });
-
-type toggleIsLocalFetchingActionType = {
-   type: typeof LOCAL_IS_FETCHING
-   localIsFetching: boolean
-}
-export const toggleLocalIsFetching = (localIsFetching: boolean): toggleIsLocalFetchingActionType => ({ type: LOCAL_IS_FETCHING, localIsFetching });
-
-type onEditModeActionType = {
-   type: typeof ON_EDIT_MODE
-}
-export const onEditMode = (): onEditModeActionType => ({ type: ON_EDIT_MODE });
-
-
-type offEditModeActionType = {
-   type: typeof OFF_EDIT_MODE
-}
-export const offEditMode = (): offEditModeActionType => ({ type: OFF_EDIT_MODE });
 
 
 
@@ -171,22 +113,22 @@ export const offEditMode = (): offEditModeActionType => ({ type: OFF_EDIT_MODE }
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
 export const getUserProfile = (userId: number): ThunkType => async (dispatch) => {
-   dispatch(toggleIsFetching(true));
+   dispatch(actions.toggleIsFetching(true));
    let response = await profileAPI.getProfile(userId);
-   dispatch(setUserProfile(response.data));
-   dispatch(toggleIsFetching(false));
+   dispatch(actions.setUserProfile(response.data));
+   dispatch(actions.toggleIsFetching(false));
 };
 
 export const getStatus = (userId: number): ThunkType => async (dispatch) => {
    let response = await profileAPI.getStatus(userId);
-   dispatch(setStatus(response.data));
+   dispatch(actions.setStatus(response.data));
 };
 
 export const updateStatus = (status: string): ThunkType => async (dispatch) => {
    try {
       let response = await profileAPI.updateStatus(status)
       if (response.data.resultCode === ResultCodeEnum.Success) {
-         dispatch(setStatus(status));
+         dispatch(actions.setStatus(status));
       }
    } catch (error: any) {
       dispatch(showError(error.message));
@@ -195,12 +137,12 @@ export const updateStatus = (status: string): ThunkType => async (dispatch) => {
 
 export const updatePhoto = (photoFile: PhotosType): ThunkType => async (dispatch) => {
    try {
-      dispatch(toggleLocalIsFetching(true))
+      dispatch(actions.toggleLocalIsFetching(true))
       let response = await profileAPI.updatePhoto(photoFile)
       if (response.data.resultCode === ResultCodeEnum.Success) {
-         dispatch(setPhoto(response.data.data.photos));
+         dispatch(actions.setPhoto(response.data.data.photos));
       }
-      dispatch(toggleLocalIsFetching(false))
+      dispatch(actions.toggleLocalIsFetching(false))
    } catch (error: any) {
       dispatch(showError(error.message));
    }
@@ -208,18 +150,21 @@ export const updatePhoto = (photoFile: PhotosType): ThunkType => async (dispatch
 
 export const updateProfile = (profileData: ProfileType): ThunkType => async (dispatch, getState: any) => {
    try {
+      dispatch(actions.toggleIsFetching(true))
       const userId = getState().auth.userId
       let response = await profileAPI.updateProfile(profileData)
       if (response.data.resultCode === ResultCodeEnum.Success) {
          dispatch(getUserProfile(userId));
-         dispatch(offEditMode());
+         dispatch(actions.offEditMode());
       } else {
          let errorMessage = response.data.messages.length > 0 ? response.data.messages[0] : "Some error";
          dispatch(stopSubmit('editForm', { _error: errorMessage }));
       }
+      dispatch(actions.toggleIsFetching(false))
    } catch (error: any) {
       dispatch(showError(error.message));
    }
 };
+
 
 export default profileReducer;

@@ -9,12 +9,14 @@ import { maxLengthCreator, required } from '../../utilits/validators/validators'
 import { Redirect } from 'react-router-dom';
 import { getIsAuth } from '../../selectors/auth-selectors';
 import { AppStateType } from '../../redux/redux-store';
+import Preloader from '../common/Preloader/Preloader';
 
 const maxLength30 = maxLengthCreator(30)
 
 type MapStateToPropsType = {
    isAuth: boolean
    captcha: string | null
+   isFetching?: boolean
 }
 type MapDispatchToPropsType = {
    authUserLogIn: (email: string, password: string, rememberMe: boolean, captcha: string) => void

@@ -1,26 +1,24 @@
 import { ThunkAction } from "redux-thunk";
-import { AppStateType } from "./redux-store";
+import { AppStateType, InferActionsTypes } from "./redux-store";
 
-const ON_MODE = 'ON_MODE';
-const OFF_MODE = 'OFF_MODE';
+
 
 let initialState = {
    errorMessage: null as string | null,
    errorsMode: true,
 };
 type initialStateType = typeof initialState;
-
-type ActionTypes = activateModeActionType | deactivateModeActionType
+type ActionTypes = InferActionsTypes<typeof actions>
 
 const errorsReducer = (state = initialState, action: ActionTypes): initialStateType => {
    switch (action.type) {
-      case ON_MODE:
+      case "ON_MODE":
          return {
             ...state,
             errorsMode: true,
             errorMessage: action.errorMessage,
          };
-      case OFF_MODE:
+      case "OFF_MODE":
          return {
             ...state,
             errorsMode: false,
@@ -31,21 +29,18 @@ const errorsReducer = (state = initialState, action: ActionTypes): initialStateT
    }
 };
 
-type activateModeActionType = {
-   type: typeof ON_MODE
-   errorMessage: string | null
-}
-export const activateMode = (errorMessage: string | null): activateModeActionType => ({ type: ON_MODE, errorMessage });
 
-type deactivateModeActionType = {
-   type: typeof OFF_MODE
+export const actions = {
+   activateMode: (errorMessage: string | null) => ({ type: 'ON_MODE', errorMessage } as const),
+   deactivateMode: () => ({ type: 'OFF_MODE' } as const)
 }
-export const deactivateMode = (): deactivateModeActionType => ({ type: OFF_MODE });
+
+
 
 type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
 
 export const showError = (errorMessage: string | null): ThunkType => (dispatch) => {
-   dispatch(activateMode(errorMessage));
+   dispatch(actions.activateMode(errorMessage));
 };
 
 export default errorsReducer;

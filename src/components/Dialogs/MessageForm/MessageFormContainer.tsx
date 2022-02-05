@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, reset } from 'redux-form';
 import s from './MessageForm.module.scss'
 import { compose } from 'redux';
-import { addMessageActionCreator } from '../../../redux/dialogs-reducer';
+import { actions } from '../../../redux/dialogs-reducer';
 import { maxLengthCreator, required } from '../../../utilits/validators/validators';
 import { Textarea } from '../../common/FormElements/FormElements';
 import { AppStateType } from '../../../redux/redux-store';
@@ -50,5 +50,5 @@ const MessageReduxForm = reduxForm({ form: 'MessageForm' })(MessageForm);
 
 
 export default compose(
-   connect(mapStateToProps, { addMessageActionCreator }),
+   connect(mapStateToProps, { ...actions }),
 )(MessageFormComponent);

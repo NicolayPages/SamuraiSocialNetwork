@@ -4,14 +4,19 @@ import { compose } from 'redux';
 import { Field, reduxForm, reset } from 'redux-form';
 import { Input } from '../../common/FormElements/FormElements';
 import s from './EditForm.module.scss'
-import { Textarea } from './../../common/FormElements/FormElements';
-import { updateProfile, offEditMode } from './../../../redux/profile-reducer';
-import { getProfile } from '../../../selectors/profile-selectors';
+import { Textarea } from '../../common/FormElements/FormElements';
+import { updateProfile, actions } from '../../../redux/profile-reducer';
+import { getIsFetching, getProfile } from '../../../selectors/profile-selectors';
+import Preloader from '../../common/Preloader/Preloader';
+
 
 
 const Settings = (props) => {
    let onSubmit = (formData) => {
       props.updateProfile(formData);
+   }
+   if (props.isFetching) {
+      return <Preloader />
    }
    return (
       <div className={s.wrapper}>
@@ -178,10 +183,11 @@ const EditReduxForm = reduxForm({ form: 'editForm' })(EditForm);
 let mapStateToProps = (state) => {
    return {
       profile: getProfile(state),
+      isFetching: getIsFetching(state),
    }
 }
 
 export default compose(
-   connect(mapStateToProps, { updateProfile, offEditMode }),
+   connect(mapStateToProps, { updateProfile, ...actions }),
 )(Settings)
 

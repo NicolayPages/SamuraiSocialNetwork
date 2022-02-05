@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, withRouter } from 'react-router';
+import { withRouter, } from 'react-router';
 import { compose } from 'redux';
 import { getUserId } from '../../selectors/auth-selectors';
 import Preloader from '../common/Preloader/Preloader';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-import { getStatus, getUserProfile, updateStatus, updatePhoto, onEditMode, offEditMode } from '../../redux/profile-reducer';
+import { getStatus, getUserProfile, updateStatus, updatePhoto, actions } from '../../redux/profile-reducer';
 import { getIsFetching, getProfile, getUserStatus } from '../../selectors/profile-selectors';
 import { followUsers, getUsersTest, unfollowUsers } from '../../redux/users-reducer';
 import { getIsFollowing, getUsers } from '../../selectors/users-selectors';
@@ -13,6 +13,7 @@ import Profile from './Profile';
 import { getIsAuth } from '../../selectors/auth-selectors';
 import { AppStateType } from '../../redux/redux-store';
 import { ProfileType } from '../../types/types'
+import { Redirect } from 'react-router-dom';
 
 type OwnProps = {
   match: any
@@ -96,7 +97,7 @@ let mapStateToProps = (state: AppStateType): MapStateToPropsType => {
 export default compose(
   connect(mapStateToProps, {
     getUserProfile, getStatus, updateStatus, followUsers, unfollowUsers, updatePhoto,
-    onEditMode,
+    ...actions,
   }),
   withRouter,
 )(ProfileContainer);

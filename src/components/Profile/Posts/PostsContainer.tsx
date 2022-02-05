@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { addPostActionCreator, deletePost, likePost } from '../../../redux/profile-reducer'
+import { actions } from '../../../redux/profile-reducer'
 import Post from './Post/Post';
 import s from './Posts.module.scss'
 import { reduxForm, Field, reset } from 'redux-form';
@@ -101,5 +101,5 @@ let mapStateToProps = (state: AppStateType): MapStateToProps => {
 };
 
 export default compose(
-   connect(mapStateToProps, { addPostActionCreator, deletePost, likePost }),
+   connect(mapStateToProps, { ...actions }),
 )(PostsComponent);
