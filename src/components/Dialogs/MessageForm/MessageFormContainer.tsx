@@ -1,54 +1,37 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { reduxForm, Field, reset } from 'redux-form';
-import s from './MessageForm.module.scss'
-import { compose } from 'redux';
+import { Field, Form, Formik } from 'formik';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { actions } from '../../../redux/dialogs-reducer';
-import { maxLengthCreator, required } from '../../../utilits/validators/validators';
-import { Textarea } from '../../common/FormElements/FormElements';
-import { AppStateType } from '../../../redux/redux-store';
-
-const maxLength200 = maxLengthCreator(200);
+import s from './MessageForm.module.scss';
 
 
-
-class MessageFormComponent extends React.Component<any> {
-   onAddMessage = (values: any, dispatch: any) => {
-      this.props.addMessageActionCreator(values.addNewMessage);
-      dispatch(reset('MessageForm'));
-   };
-   render() {
-      return (
-         <MessageReduxForm onSubmit={this.onAddMessage} />
-      );
-   }
+type PropsType = {}
+interface MyFormValues {
+   newMessage: string;
 }
 
-const MessageForm = (props: any) => {
+
+export const MessageForm: React.FC<PropsType> = React.memo((props) => {
+
+   const dispatch = useDispatch();
+
+   const addMessageActionCreator = actions.addMessageActionCreator
+
+   let onAddMessage = (values: any, actions: any) => {
+      dispatch(addMessageActionCreator(values.newMessage))
+      actions.resetForm(true);
+   };
+
+   const initialValues: MyFormValues = { newMessage: '' };
+
    return (
-      <form className={s.messageForm} onSubmit={props.handleSubmit}>
-         <Field
-            component={Textarea}
-            className={s.messageArea}
-            placeholder="Write message..."
-            name={'addNewMessage'}
-            validate={[required, maxLength200]} />
-         <button className={s.messageSend}>Send</button>
-      </form>
+      <Formik className={s.wrapper} initialValues={initialValues} onSubmit={onAddMessage}>
+         <Form className={s.messageForm}>
+            <Field component={'textarea'} name={'newMessage'} className={s.messageArea} placeholder="Write message..." />
+            <button className={s.messageSend}>Send</button>
+         </Form>
+      </Formik>
    );
-};
+})
 
 
-
-let mapStateToProps = (state: any) => {
-   return {
-      newText: state.dialogsPage.messageNewText,
-   }
-};
-
-const MessageReduxForm = reduxForm({ form: 'MessageForm' })(MessageForm);
-
-
-export default compose(
-   connect(mapStateToProps, { ...actions }),
-)(MessageFormComponent);

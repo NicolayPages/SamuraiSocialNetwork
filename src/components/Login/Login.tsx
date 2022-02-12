@@ -1,49 +1,48 @@
 import React from 'react';
-import s from './Login.module.scss';
-import { reduxForm, Field, reset } from 'redux-form';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { authUserLogIn } from '../../redux/auth-reducer';
-import { Input } from '../common/FormElements/FormElements';
-import { maxLengthCreator, required } from '../../utilits/validators/validators';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getIsAuth } from '../../selectors/auth-selectors';
-import { AppStateType } from '../../redux/redux-store';
-import Preloader from '../common/Preloader/Preloader';
+import { Field, reduxForm } from 'redux-form';
+import { authUserLogIn } from '../../redux/auth-reducer';
+import { getCaptcha, getIsAuth } from '../../selectors/auth-selectors';
+import { maxLengthCreator, required } from '../../utilits/validators/validators';
+import { Input } from '../common/FormElements/FormElements';
+import s from './Login.module.scss';
 
+type PropsType = {
+   onSubmitForm: (email: string, password: string, rememberMe: boolean, captcha?: any) => void
+   captcha: any
+}
 const maxLength30 = maxLengthCreator(30)
 
-type MapStateToPropsType = {
-   isAuth: boolean
-   captcha: string | null
-   isFetching?: boolean
-}
-type MapDispatchToPropsType = {
-   authUserLogIn: (email: string, password: string, rememberMe: boolean, captcha: string) => void
-}
-type PropsType = MapStateToPropsType & MapDispatchToPropsType
 
+const LoginContainer: React.FC = React.memo(() => {
+   const isAuth = useSelector(getIsAuth)
+   const captcha = useSelector(getCaptcha)
+   const dispatch = useDispatch()
 
-
-class LoginContainer extends React.Component<PropsType> {
-   onSubmit = (formData: any, dispatch: any) => {
-      this.props.authUserLogIn(formData.email, formData.password, formData.rememberMe, formData.captcha);
+   let onSubmitForm = (formData: any) => {
+      dispatch(authUserLogIn(formData.email, formData.password, formData.rememberMe, formData.captcha))
    };
-   render() {
-      if (this.props.isAuth) {
-         return <Redirect to={'/profile'} />
-      }
-      return (
-         <div className={s.container}>
-            <h1 className={s.title}>Login</h1>
-            <LoginReduxForm onSubmit={this.onSubmit} {...this.props} />
-         </div>
-      );
-   };
-};
 
+   if (isAuth) {
+      return <Redirect to={'/profile'} />
+   }
 
-const LoginForm: React.FC<any> = (props: any) => {
+   return (
+      <Login onSubmitForm={onSubmitForm} captcha={captcha} />
+   );
+})
+
+const Login: React.FC<any> = React.memo((props) => {
+   return (
+      <div className={s.container}>
+         <h1 className={s.title}>Login</h1>
+         <LoginReduxForm onSubmit={props.onSubmitForm} {...props} />
+      </div>
+   )
+})
+
+const LoginForm: React.FC<any> = React.memo((props) => {
    return (
       <form className={s.form} onSubmit={props.handleSubmit}>
          <div>
@@ -61,7 +60,7 @@ const LoginForm: React.FC<any> = (props: any) => {
          </div>
          <div className={s.flex}>
             <Field component={'input'} className={s.checkbox} type="checkbox" name='rememberMe' tabIndex={3} />
-            <span> remember me</span>
+            <span> Remember me</span>
          </div>
          {props.error && <span className={s.formSummeryError}>{props.error}</span>}
          {props.captcha && <div>
@@ -73,17 +72,8 @@ const LoginForm: React.FC<any> = (props: any) => {
          </div>
       </form >
    );
-};
-
+})
 const LoginReduxForm = reduxForm({ form: 'login' })(LoginForm)
 
-let mapStateToProps = (state: AppStateType): MapStateToPropsType => {
-   return {
-      isAuth: getIsAuth(state),
-      captcha: state.auth.captcha,
-   };
-};
 
-export default compose(
-   connect(mapStateToProps, { authUserLogIn })
-)(LoginContainer);
+export default LoginContainer

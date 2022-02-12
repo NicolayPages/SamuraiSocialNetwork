@@ -4,7 +4,8 @@ import dogIcon from '../../assets/images/corgi.png'
 import { Link } from 'react-router-dom';
 import ErrorPopup from '../common/ErrorPopup/ErrorPopup';
 
-const NotFound = (props: any) => {
+
+const NotFound: React.FC = React.memo(() => {
    return (
       <div className={s.wrapper}>
          <h1 className={s.title}>
@@ -17,6 +18,6 @@ const NotFound = (props: any) => {
          <ErrorPopup />
       </div>
    );
-}
+})
 
-export default NotFound;
+export default NotFound

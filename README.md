@@ -8,13 +8,19 @@
 
 ## In my study project I used the following technologies and libraries:
 
-### - React
-### - React-router
-### - Redux
-### - Redux-thank
-### - Redux-form
-### - SCSS
-### - Axios
+#### - React
+#### - Redux
+#### - TypeScript
+#### - Redux-thank
+#### - Redux-toolkit
+#### - UnitTests(Jest)
+#### - WebSockets(Real-time chat)
+#### - Formic
+#### - Hooks
+#### - Ant-Design
+#### - SCSS
+#### - CSS Modules
+#### - Axios
 
 ## This project was connected with [Social-network-samurai-API](https://social-network.samuraijs.com/api/1.0).
 

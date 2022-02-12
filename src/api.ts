@@ -12,8 +12,8 @@ const instance = axios.create({
 });
 
 export const usersAPI = {
-   getUsers(currentPage = 1, pageSize = 5) {
-      return instance.get<GetUsersType>(`users?page=${currentPage}&count=${pageSize}`)
+   getUsers(currentPage: number = 1, pageSize: number = 5, term: string = '', friend: null | boolean = null) {
+      return instance.get<GetUsersType>(`users?page=${currentPage}&count=${pageSize}&term=${term}` + (friend == null ? '' : `&friend=${friend}`))
          .then(response => {
             return response.data;
          })
@@ -26,6 +26,12 @@ export const usersAPI = {
    },
    unfollowUser(id = 2) {
       return instance.delete<FollowType>(`follow/${id}`)
+         .then(response => {
+            return response.data;
+         })
+   },
+   getFiends(currentPage = 1, pageSize = 3) {
+      return instance.get<GetUsersType>(`users?page=${currentPage}&count=${pageSize}&friend=true`)
          .then(response => {
             return response.data;
          })

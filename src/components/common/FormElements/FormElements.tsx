@@ -7,7 +7,7 @@ type PropsType = {
    meta: any
 }
 
-export const Textarea: React.FC<PropsType> = ({ input, meta, ...props }) => {
+export const Textarea: React.FC<PropsType> = React.memo(({ input, meta, ...props }) => {
    const hasError = meta.touched && meta.error;
    return (
       <div className={s.formControl + ' ' + (hasError ? s.error : '')}>
@@ -15,9 +15,9 @@ export const Textarea: React.FC<PropsType> = ({ input, meta, ...props }) => {
          {hasError && <span className={s.span}>{meta.error}</span>}
       </div>
    );
-};
+})
 
-export const Input: React.FC<PropsType> = ({ input, meta, ...props }) => {
+export const Input: React.FC<PropsType> = React.memo(({ input, meta, ...props }) => {
    const hasError = meta.touched && meta.error;
    return (
       <div className={s.formControl + ' ' + (hasError ? s.error : '')}>
@@ -25,5 +25,5 @@ export const Input: React.FC<PropsType> = ({ input, meta, ...props }) => {
          {hasError && <span className={s.spanInput}>{meta.error}</span>}
       </div>
    );
-};
+})
 

@@ -1,10 +1,12 @@
 import React from "react";
-import s from "./Users.module.scss"
-import userPhoto from '../../assets/images/user.png'
 import { NavLink } from "react-router-dom";
-import Paginator from '../common/Paginator/Paginator';
+import userPhoto from '../../assets/images/user.png';
+import { FilterTypes } from "../../redux/users-reducer";
 import { PhotosType, UsersType } from "../../types/types";
-
+import Paginator from '../common/Paginator/Paginator';
+import Preloader from "../common/Preloader/Preloader";
+import { Search } from "./Search/Search";
+import s from "./Users.module.scss";
 
 type PropsUsersType = {
    totalUserCount: number
@@ -13,13 +15,14 @@ type PropsUsersType = {
    users: Array<UsersType> | null | any
    isFollowing: boolean
    isAuth: boolean
+   isFetching: boolean
 
    onPageChanged: (p: number) => void
-   unfollowUsers: (id: number) => Promise<void>
-   followUsers: (id: number) => Promise<void>
+   onFollowUsers: (id: number) => void
+   onUnfollowUsers: (id: number) => void
+   onFilterChanged: (filter: FilterTypes) => void
 
 }
-
 type PropsItemsType = {
    id: number
    photos: PhotosType
@@ -29,69 +32,86 @@ type PropsItemsType = {
    status: string
    name: string
 
-   unfollowUsers: (id: number) => Promise<void>
-   followUsers: (id: number) => Promise<void>
+   onFollowUsers: (id: number) => void
+   onUnfollowUsers: (id: number) => void
 }
 
-const Users: React.FC<PropsUsersType> = (props) => {
-   let itemsArr = props.users.map((u: any) => < UserItem
+
+export const Users: React.FC<PropsUsersType> = React.memo((props) => {
+
+   const { totalUserCount, pageSize, isFetching, currentPage, users, isFollowing, isAuth, onPageChanged, onFollowUsers, onUnfollowUsers, onFilterChanged } = props
+
+   let itemsArr = users.map((u: UsersType) => < UserItem
+      onUnfollowUsers={onUnfollowUsers}
+      onFollowUsers={onFollowUsers}
+      isFollowing={isFollowing}
+      isAuth={isAuth}
+
       key={u.id}
-      unfollowUsers={props.unfollowUsers}
-      followUsers={props.followUsers}
-      isFollowing={props.isFollowing}
       photos={u.photos}
       id={u.id}
       status={u.status}
       name={u.name}
       followed={u.followed}
-      isAuth={props.isAuth}
+
    />)
+
    return (
       <div className={s.wrapper}>
-         {itemsArr}
-         <Paginator
-            totalUserCount={props.totalUserCount}
-            pageSize={props.pageSize}
-            currentPage={props.currentPage}
-            onPageChanged={props.onPageChanged} />
+         <div className={s.content}>
+            <h1 className={s.title}>Users</h1>
+            <Search onFilterChanged={onFilterChanged} />
+            {
+               isFetching ? <Preloader /> :
+                  <div className={s.items} >
+                     {itemsArr.length != 0 ? itemsArr : <p className={s.notFound}>User is not found...</p>}
+                  </div>
+            }
+            <Paginator
+               totalUserCount={totalUserCount}
+               pageSize={pageSize}
+               currentPage={currentPage}
+               onPageChanged={onPageChanged}
+            />
+         </div>
       </div >
    );
-};
+})
 
+const UserItem: React.FC<PropsItemsType> = React.memo((props) => {
 
+   const { onFollowUsers, onUnfollowUsers, id, photos, isAuth, followed, isFollowing, status, name } = props
 
-const UserItem: React.FC<PropsItemsType> = (props) => {
    return (
-      <div className={s.item} key={props.id}>
-         <div className={s.head}>
-            <div className={s.ava}>
-               <NavLink to={'/profile/' + props.id}>
-                  <img src={props.photos.small != null ? props.photos.small : userPhoto} alt="" />
-               </NavLink>
-            </div>
-            {props.isAuth &&
-               <div>
-                  {props.followed
-                     ? <button disabled={props.isFollowing.some((id: number | null) => id === props.id)}
-                        className={s.followedBtn} onClick={() => { props.unfollowUsers(props.id) }}>unfollow</button>
-                     : <button disabled={props.isFollowing.some((id: number | null) => id === props.id)}
-                        className={s.followedBtn} onClick={() => { props.followUsers(props.id) }}>follow</button>}
-               </div>
-            }
+      <div className={s.item} key={id}>
+         <div className={s.ava}>
+            <NavLink className={s.avaLink} to={'/profile/' + id}>
+               <img src={photos.small != null ? photos.small : userPhoto} alt="" />
+            </NavLink>
          </div>
          <div className={s.info}>
-            <div className={s.mainInfo}>
-               <h2 className={s.name}>{props.name}</h2>
-               <p className={s.status}>{props.status != null ? props.status : "Something about user"}</p>
+            <div className={s.infoUser}>
+               <h2 className={s.name}>{name}</h2>
+               <p className={s.status}>{status != null ? status : "Something about user"}</p>
             </div>
-            <div className={s.location}>
-               <h3 className={s.country}>{"Country"}</h3>
-               <h3 className={s.city}>{"City"}</h3>
-            </div>
+            {isAuth &&
+               <div className={s.btns}>
+                  {
+                     followed
+                        ? <button disabled={isFollowing.some((id: number | null) => id === id)}
+                           className={s.followedBtn} onClick={() => { onUnfollowUsers(id) }}>unfollow</button>
+                        : <button disabled={isFollowing.some((id: number | null) => id === id)}
+                           className={s.followedBtn} onClick={() => { onFollowUsers(id) }}>follow</button>
+                  }
+               </div>
+            }
          </div>
       </div>
    )
 
-}
+})
 
-export default Users;
+
+
+
+

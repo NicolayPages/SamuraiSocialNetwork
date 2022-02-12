@@ -17,8 +17,8 @@ type ActionTypes = InferActionsTypes<typeof actions>
 let initialState = {
    posts: [
       { id: 1, message: "Hi, how are you", likes: 2, },
-      { id: 2, message: "Hello everything", likes: 12, },
-      { id: 3, message: "Goodbye", likes: 5, },
+      { id: 2, message: "Hello everyone", likes: 12, },
+      { id: 3, message: "My pet project", likes: 5, },
    ] as Array<PostsType>,
    profile: null as ProfileType | null,
    isFetching: false,
@@ -32,7 +32,7 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
    switch (action.type) {
       case 'ADD_POST': {
          let newPost = {
-            id: state.posts.length + 1,
+            id: state.posts.length + 2,
             message: action.postMessage,
             likes: 0,
          };

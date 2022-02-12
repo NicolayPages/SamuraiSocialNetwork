@@ -9,7 +9,7 @@ type PropsType = {
    onPageChanged: (p: number) => void
 }
 
-const Paginator: React.FC<PropsType> = (props) => {
+const Paginator: React.FC<PropsType> = React.memo((props) => {
    let pagesCount = Math.ceil(props.totalUserCount / props.pageSize);
    let pages = [];
    for (let i = 1; i <= pagesCount; i++) {
@@ -36,7 +36,7 @@ const Paginator: React.FC<PropsType> = (props) => {
             <button className={s.pagBtn} onClick={() => (setPortionNumber(portionNumber + 1))}>next</button>}
       </div>
    );
-}
+})
 
 export default Paginator;
 

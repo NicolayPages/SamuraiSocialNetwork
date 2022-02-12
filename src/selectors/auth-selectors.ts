@@ -9,3 +9,10 @@ export const getLogin = (state: AppStateType) => {
 export const getUserId = (state: AppStateType) => {
    return state.auth.userId
 };
+export const getCaptcha = (state: AppStateType) => {
+   return state.auth.captcha
+};
+
+export const getInitialized = (state: AppStateType) => {
+   return state.app.initialized
+};

@@ -41,11 +41,11 @@ let store = {
       },
       sidebar: {
          links: [
-            { id: 1, adress: "profile", name: "Profile", },
-            { id: 2, adress: "dialogs", name: "Dialogs", },
-            { id: 3, adress: "news", name: "News", },
-            { id: 4, adress: "music", name: "Music", },
-            { id: 5, adress: "settings", name: "Settings", },
+            { id: 1, address: "profile", name: "Profile", },
+            { id: 2, address: "dialogs", name: "Dialogs", },
+            { id: 3, address: "news", name: "News", },
+            { id: 4, address: "music", name: "Music", },
+            { id: 5, address: "settings", name: "Settings", },
          ],
          friends: [
             { id: 1, name: "Alex", },

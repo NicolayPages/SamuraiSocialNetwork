@@ -1,8 +1,8 @@
 import React from 'react';
-import s from './Preloader.module.scss';
+import s from './Preloader.module.scss'
 
 
-const Preloader: React.FC = React.memo(() => {
+const MiniPreloader: React.FC = React.memo(() => {
    return (
       <div className={s.wrapper}>
          <div className={s.ldsDualRing}></div>
@@ -10,4 +10,4 @@ const Preloader: React.FC = React.memo(() => {
    );
 })
 
-export default Preloader;
+export default MiniPreloader;

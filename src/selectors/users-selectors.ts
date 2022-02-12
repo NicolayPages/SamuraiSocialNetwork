@@ -19,6 +19,10 @@ export const getIsFollowing = (state: AppStateType) => {
 export const getCurrentPage = (state: AppStateType) => {
    return state.usersPage.currentPage
 };
+export const getFilter = (state: AppStateType) => {
+   return state.usersPage.filter
+};
+
 
 //test 
 export const getUsersSelector = (state: AppStateType) => {

@@ -16,6 +16,7 @@
       font-weight: 500;
    }
 }
+
 .flex {
    display: flex;
    align-items: center;
@@ -54,4 +55,5 @@
 .flex {
    display: flex;
    gap: 8px;
+   justify-content: flex-end;
 }

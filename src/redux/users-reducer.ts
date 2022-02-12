@@ -7,6 +7,7 @@ import { ThunkAction } from 'redux-thunk';
 
 
 type InitialStateType = typeof initialState
+export type FilterTypes = typeof initialState.filter
 type ActionTypes = InferActionsTypes<typeof actions>;
 
 
@@ -18,6 +19,10 @@ let initialState = {
    currentPage: 1,
    isFetching: false,
    isFollowing: [] as any,
+   filter: {
+      term: '',
+      friend: null as null | boolean
+   }
 };
 
 const usersReducer = (state = initialState, action: ActionTypes): InitialStateType => {
@@ -56,6 +61,10 @@ const usersReducer = (state = initialState, action: ActionTypes): InitialStateTy
                ? [...state.isFollowing, action.userId]
                : state.isFollowing.filter((id: number) => id != action.userId)
          };
+      case 'SET_FILTER':
+         return {
+            ...state, filter: action.filter
+         };
       default:
          return state;
    }
@@ -65,6 +74,7 @@ export const actions = {
    follow: (userId: number) => ({ type: 'FOLLOW', userId } as const),
    unfollow: (userId: number) => ({ type: 'UN_FOLLOW', userId } as const),
    setUsers: (users: Array<UsersType>) => ({ type: 'SET_USERS', users } as const),
+   filterUsers: (filter: FilterTypes) => ({ type: 'SET_FILTER', filter } as const),
    setPage: (currentPage: number) => ({ type: 'SET_PAGE', currentPage } as const),
    setTotalCount: (totalCount: number) => ({ type: 'SET_TOTAL_COUNT', totalCount } as const),
    toggleIsFetching: (isFetching: boolean) => ({ type: 'IS_FETCHING', isFetching } as const),
@@ -88,25 +98,15 @@ const followUnfollowFlow = async (dispatch: any, userId: number, apiMethod: any,
    }
 };
 
-export const requestUsers = (currentPage: number, pageSize: number): ThunkType => async (dispatch) => {
+export const requestUsers = (currentPage: number, pageSize: number, filter: { term: string, friend: null | boolean }): ThunkType => async (dispatch) => {
    try {
       dispatch(actions.toggleIsFetching(true));
-      let data = await usersAPI.getUsers(currentPage, pageSize);
+      dispatch(actions.filterUsers(filter));
+      dispatch(actions.setPage(currentPage));
+      let data = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friend);
       dispatch(actions.setUsers(data.items));
       dispatch(actions.setTotalCount(data.totalCount));
       dispatch(actions.toggleIsFetching(false));
-   } catch (error: any) {
-      dispatch(showError(error.message));
-   }
-};
-
-export const setUsersPage = (p: number, pageSize: number): ThunkType => async (dispatch) => {
-   try {
-      dispatch(actions.setPage(p));
-      dispatch(actions.toggleIsFetching(true));
-      let data = await usersAPI.getUsers(p, pageSize);
-      dispatch(actions.toggleIsFetching(false));
-      dispatch(actions.setUsers(data.items));
    } catch (error: any) {
       dispatch(showError(error.message));
    }

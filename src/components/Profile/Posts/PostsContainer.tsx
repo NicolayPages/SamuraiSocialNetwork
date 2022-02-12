@@ -1,105 +1,111 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { actions } from '../../../redux/profile-reducer'
-import Post from './Post/Post';
-import s from './Posts.module.scss'
-import { reduxForm, Field, reset } from 'redux-form';
-import { Textarea } from '../../common/FormElements/FormElements';
-import { maxLengthCreator, required } from '../../../utilits/validators/validators';
-import { getPosts } from '../../../selectors/profile-selectors';
-import { getProfile } from '../../../selectors/profile-selectors';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions } from '../../../redux/profile-reducer';
 import { getUserId } from '../../../selectors/auth-selectors';
-import { PhotosType, ProfileType } from '../../../types/types';
-import { AppStateType } from '../../../redux/redux-store';
+import { getPosts, getProfile } from '../../../selectors/profile-selectors';
+import { ProfileType } from '../../../types/types';
+import { Post } from './Post/Post';
+import s from './Posts.module.scss';
 
-const maxLength200 = maxLengthCreator(200);
 
-type MapStateToProps = {
-   posts: any
-   profile: ProfileType | null
-   authId: number | null
-}
-type MapDispatchToProps = {
-   addPostActionCreator: (postsFormMessage: any) => void
-   deletePost: (id: number) => void
-   likePost: (id: number, like: number) => void
-   onAddPost: (values: any, dispatch: any) => void
-}
+
 type PostsType = {
-   posts: any
+   posts: Array<PostsType> | any
    authId: number | null
    profile: ProfileType | null
 
-   likePost: (id: number, like: number) => void
-   deletePost: (id: number) => void
+   onLikePost: (id: number, like: number) => void
+   onDeletePost: (id: number) => void
    onAddPost: (values: any, dispatch: any) => void
 }
-type PropsType = MapStateToProps & MapDispatchToProps
 
+export const PostsContainer: React.FC = React.memo(() => {
 
-class PostsComponent extends React.Component<any> {
-   onAddPost = (values: any, dispatch: any,) => {
-      this.props.addPostActionCreator(values.postsFormMessage,);
-      dispatch(reset("postsForm"));
+   const posts = useSelector(getPosts)
+   const profile = useSelector(getProfile)
+   const authId = useSelector(getUserId)
+   const dispatch = useDispatch()
+
+   const { addPostActionCreator, deletePost, likePost } = actions
+
+   let onAddPost = (newMessage: string) => {
+      dispatch(addPostActionCreator(newMessage))
    };
-   render() {
-      return (
-         <Posts
-            profile={this.props.profile}
-            posts={this.props.posts}
-            onAddPost={this.onAddPost}
-            deletePost={this.props.deletePost}
-            likePost={this.props.likePost}
-            authId={this.props.authId}
-         />
-      );
+   let onDeletePost = (id: number) => {
+      dispatch(deletePost(id))
    }
-}
+   let onLikePost = (id: number, like: number) => {
+      dispatch(likePost(id, like))
+   }
+   return (
+      <Posts
+         profile={profile}
+         posts={posts}
+         authId={authId}
 
+         onAddPost={onAddPost}
+         onDeletePost={onDeletePost}
+         onLikePost={onLikePost}
+      />
+   );
+})
 
+const Posts: React.FC<PostsType> = React.memo((props) => {
+   const { profile, posts, authId, onAddPost, onDeletePost, onLikePost } = props
 
-const Posts: React.FC<PostsType> = (props) => {
-   let postElements = props.posts.map((p: any) => <Post profile={props.profile} likePost={props.likePost}
-      deletePost={props.deletePost} id={p.id} key={p.id} message={p.message} likes={p.likes} authId={props.authId} />);
+   let postElements = posts.map((p: any) => <Post
+      profile={profile}
+      onLikePost={onLikePost}
+      onDeletePost={onDeletePost}
+      authId={authId}
+      id={p.id}
+      key={p.id}
+      message={p.message}
+      likes={p.likes}
+   />);
    return (
       <div className={s.Posts}>
          <h2 className={s.Posts__title}>My posts</h2>
-         {props.profile?.userId == props.authId && <PostsReduxForm onSubmit={props.onAddPost} />}
+         {profile?.userId == authId && <PostsForm onAddPost={onAddPost} />}
          <div className={s.Posts__wrapper}>
             {postElements}
          </div>
       </div>
    );
-};
+})
 
-const PostsForm: React.FC<any> = (props) => {
 
-   return (
-      <form className={s.Posts__sending} onSubmit={props.handleSubmit}>
-         <Field
-            component={Textarea}
-            name={'postsFormMessage'}
-            type="text"
-            className={s.input}
-            placeholder="your news..."
-            validate={[required, maxLength200]}
-         />
-         <button className={s.btn}>send</button>
-      </form>
-   );
-};
 
-const PostsReduxForm = reduxForm({ form: 'postsForm', })(PostsForm);
-
-let mapStateToProps = (state: AppStateType): MapStateToProps => {
-   return {
-      posts: getPosts(state),
-      profile: getProfile(state),
-      authId: getUserId(state),
+const PostsForm: React.FC<any> = React.memo((props) => {
+   let initialValues = { postsFormMessage: '' }
+   let onSubmit = (values: any, actions: any) => {
+      props.onAddPost(values.postsFormMessage)
+      actions.resetForm(true)
    }
-};
+   return (
+      <div>
+         <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            className={s.formWrapper}
+         >
+            <Form className={s.form}>
+               <Field
+                  component={'textarea'}
+                  name={'postsFormMessage'}
+                  type="text"
+                  className={s.area}
+                  placeholder="your news..."
+               />
+               <ErrorMessage name="email" component="div" />
+               <button className={s.btn}>send</button>
+            </Form>
+         </Formik>
+      </div>
+   )
+})
 
-export default compose(
-   connect(mapStateToProps, { ...actions }),
-)(PostsComponent);
+
+
+

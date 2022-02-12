@@ -3,17 +3,17 @@ import s from '../Sidebar.module.scss'
 import { NavLink } from 'react-router-dom';
 
 type PropsType = {
-   adress: string
+   address: string
    name: string
 }
 
-const Menu_link: React.FC<PropsType> = (props) => {
-   let path = "/" + props.adress;
+export const Menu_link: React.FC<PropsType> = React.memo((props) => {
+   let path = "/" + props.address;
    return (
       <li className={s.sidebar__link}>
          <NavLink to={path} activeClassName={s.active}>{props.name}</NavLink>
       </li>
    );
-}
+})
 
-export default Menu_link;
+

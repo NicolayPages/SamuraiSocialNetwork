@@ -13,3 +13,9 @@ export const getPosts = (state: AppStateType) => {
    return state.profilePage.posts
 };
 
+export const getEditMode = (state: AppStateType) => {
+   return state.profilePage.editMode
+};
+export const getLocalIsFetching = (state: AppStateType) => {
+   return state.profilePage.localIsFetching
+};

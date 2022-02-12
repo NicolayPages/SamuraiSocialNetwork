@@ -1,11 +1,16 @@
+.wrapper {
+   width: 100%;
+}
 .messageForm {
    display: flex;
    margin-top: 80px;
    box-shadow: 0px 4px 8px 2px rgba(173, 102, 213, 0.42);
    border-radius: 10px;
    margin-bottom: 10px;
+   width: 100%;
 }
 .messageArea {
+   flex: 1 1 auto;
    resize: none;
    background-color: #f0f0f0;
    font-size: 18px;

@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import s from './Dialog.module.scss'
+import s from './Dialog.module.scss';
 
 type PropsType = {
    id: number
    name: string
 }
 
-const Dialog: React.FC<PropsType> = (props) => {
-   let path = "/dialogs/" + props.id;
+export const Dialog: React.FC<PropsType> = React.memo((props) => {
+   const { id, name } = props
+   let path = "/dialogs/" + id;
    return (
-      <li className={s.link}><NavLink to={path} activeClassName="selected" >{props.name}</NavLink></li>
+      <li className={s.link}><NavLink to={path} activeClassName="selected" >{name}</NavLink></li>
    );
-}
-
-export default Dialog;
+})

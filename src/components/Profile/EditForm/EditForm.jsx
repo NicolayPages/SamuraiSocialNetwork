@@ -1,38 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { Field, reduxForm, reset } from 'redux-form';
-import { Input } from '../../common/FormElements/FormElements';
-import s from './EditForm.module.scss'
-import { Textarea } from '../../common/FormElements/FormElements';
-import { updateProfile, actions } from '../../../redux/profile-reducer';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
+import { actions, updateProfile } from '../../../redux/profile-reducer';
 import { getIsFetching, getProfile } from '../../../selectors/profile-selectors';
+import { Input, Textarea } from '../../common/FormElements/FormElements';
 import Preloader from '../../common/Preloader/Preloader';
+import s from './EditForm.module.scss';
 
 
+export const Edit = React.memo(() => {
 
-const Settings = (props) => {
+   const profile = useSelector(getProfile)
+   const isFetching = useSelector(getIsFetching)
+
+   const dispatch = useDispatch()
+   let { offEditMode } = actions
+
    let onSubmit = (formData) => {
-      props.updateProfile(formData);
+      dispatch(updateProfile(formData))
    }
-   if (props.isFetching) {
+
+   let offUserEditMode = () => {
+      dispatch(offEditMode())
+   }
+
+   if (isFetching) {
       return <Preloader />
    }
+
    return (
       <div className={s.wrapper}>
          <div className={s.userSettings}>
-            <EditReduxForm initialValues={props.profile} onSubmit={onSubmit} offEditMode={props.offEditMode} />
+            <EditReduxForm initialValues={profile} onSubmit={onSubmit} offUserEditMode={offUserEditMode} />
          </div>
       </div>
    );
-};
+})
 
-const EditForm = (props) => {
+const EditForm = React.memo((props) => {
    return (
       <form className={s.form} onSubmit={props.handleSubmit}>
          <div className={s.header} >
             <h2 className={s.subtitle}>Edit profile data</h2>
-            <p className={s.cancel} onClick={props.offEditMode}>X</p>
+            <p className={s.cancel} onClick={props.offUserEditMode}>X</p>
          </div>
          <div className={s.flex}>
             <div className={s.inputWrapper}>
@@ -174,20 +184,10 @@ const EditForm = (props) => {
          </div>
       </form>
    )
-}
+})
 
 
 const EditReduxForm = reduxForm({ form: 'editForm' })(EditForm);
 
 
-let mapStateToProps = (state) => {
-   return {
-      profile: getProfile(state),
-      isFetching: getIsFetching(state),
-   }
-}
-
-export default compose(
-   connect(mapStateToProps, { updateProfile, ...actions }),
-)(Settings)
 

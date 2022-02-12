@@ -1,47 +1,43 @@
-import React, { Component } from 'react';
-import s from './Profile.module.scss'
-import User from './User/User';
-import PostsComponent from './Posts/PostsContainer';
-import profileImage from '../../assets/images/image-profile.jpg'
-import Preloader from '../common/Preloader/Preloader';
+import React from 'react';
+import profileImage from '../../assets/images/image-profile.jpg';
+import { ProfileType } from '../../types/types';
 import ErrorPopup from '../common/ErrorPopup/ErrorPopup';
+import { PostsContainer } from './Posts/PostsContainer';
+import s from './Profile.module.scss';
+import { User } from './User/User';
 
 
-const Profile: React.FC<any> = React.memo((props) => {
-  if (!props.profile) {
-    return <Preloader />
-  }
-  if (props.isFetching) {
-    return <Preloader />
-  }
+export type PropsType = {
+  profile: ProfileType | any
+  editMode: boolean
+  localIsFetching: boolean
+  isOwner: boolean
+
+  onEditUserMode: () => void
+  updatePhoto: (photoFile: any) => void
+}
+
+export const Profile: React.FC<PropsType> = React.memo((props) => {
   return (
     <div className={s.Profile}>
-      <div>
+      <div className={s.container}>
         <div className={s.Profile__image}>
           <img src={profileImage} alt="image" />
         </div>
         <User
-          id={props.profile.userId}
           profile={props.profile}
-          status={props.status}
-          updateStatus={props.updateStatus}
-          isFollowing={props.isFollowing}
-          unfollowUsers={props.unfollowUsers}
-          followUsers={props.followUsers}
-          authId={props.authId}
           isOwner={props.isOwner}
           updatePhoto={props.updatePhoto}
           editMode={props.editMode}
-          onEditMode={props.onEditMode}
-          isFetching={props.isFetching}
+          onEditUserMode={props.onEditUserMode}
           localIsFetching={props.localIsFetching}
         />
       </div >
-      <PostsComponent />
+      <PostsContainer />
       <ErrorPopup />
     </div >
   );
 
 })
-export default Profile;
+
 
