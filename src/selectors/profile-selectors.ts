@@ -19,3 +19,7 @@ export const getEditMode = (state: AppStateType) => {
 export const getLocalIsFetching = (state: AppStateType) => {
    return state.profilePage.localIsFetching
 };
+
+export const getProfileError = (state: AppStateType) => {
+   return state.profilePage.errorMessage
+};

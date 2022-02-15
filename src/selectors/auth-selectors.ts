@@ -12,6 +12,9 @@ export const getUserId = (state: AppStateType) => {
 export const getCaptcha = (state: AppStateType) => {
    return state.auth.captcha
 };
+export const getAuthError = (state: AppStateType) => {
+   return state.auth.authError
+};
 
 export const getInitialized = (state: AppStateType) => {
    return state.app.initialized

@@ -1,9 +1,7 @@
+import { ThunkAction } from 'redux-thunk';
 import { authAPI, ResultCodeEnum, securityAPI } from '../api';
 import { showError } from './errors-reducer';
-import { stopSubmit } from 'redux-form';
-import { ThunkAction } from 'redux-thunk';
-import { AppStateType } from './redux-store';
-import { InferActionsTypes } from "./redux-store";
+import { AppStateType, InferActionsTypes } from './redux-store';
 
 
 let initialState = {
@@ -12,6 +10,7 @@ let initialState = {
    login: null as string | null,
    isAuth: false,
    captcha: null as string | null,
+   authError: null as string | null,
 };
 type initialStateType = typeof initialState
 
@@ -37,6 +36,12 @@ const authReducer = (state = initialState, action: ActionTypes): initialStateTyp
             ...action.data,
          };
       };
+      case 'SET_AUTH_ERROR': {
+         return {
+            ...state,
+            authError: action.error
+         };
+      };
       default:
          return state;
    };
@@ -50,11 +55,11 @@ export const actions = {
 
    setAuthLogin: (email: string | null, password: string | null, rememberMe: boolean) => ({ type: 'SET_LOGIN', formData: { email, password, rememberMe } } as const),
 
-   setAuthLogout: (userId: null, email: null, login: null, isAuth: boolean) => ({ type: 'SET_LOGOUT', data: { userId, email, login, isAuth, } } as const),
+   setAuthLogout: (userId: null, email: null, login: null, isAuth: boolean, authError: null) => ({ type: 'SET_LOGOUT', data: { userId, email, login, isAuth, authError } } as const),
 
    setSecurityCaptcha: (captcha: string) => ({ type: 'SET_CAPTCHA', captcha } as const),
 
-
+   setAuthError: (error: string) => ({ type: 'SET_AUTH_ERROR', error } as const),
 }
 
 
@@ -85,7 +90,7 @@ export const authUserLogIn = (email: string, password: string, rememberMe: boole
             dispatch(getCapthchaUrl())
          }
          let errorMessage = data.messages.length > 0 ? data.messages[0] : "Some error";
-         dispatch(stopSubmit('login', { _error: errorMessage }));
+         dispatch(actions.setAuthError(errorMessage))
       }
    } catch (error: any) {
       dispatch(showError(error.message));
@@ -95,10 +100,9 @@ export const authUserLogIn = (email: string, password: string, rememberMe: boole
 
 export const authUserLogOut = (): ThunkType => async (dispatch) => {
    try {
-
       let data = await authAPI.logOutUser();
       if (data.resultCode == ResultCodeEnum.Success) {
-         dispatch(actions.setAuthLogout(null, null, null, false,));
+         dispatch(actions.setAuthLogout(null, null, null, false, null,));
       }
    } catch (error: any) {
       dispatch(showError(error.message));

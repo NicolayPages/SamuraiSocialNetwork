@@ -35,7 +35,7 @@
 }
 .textarea {
    width: 100%;
-   height: 60px;
+   height: 80px;
    resize: none;
    font-size: 16px;
    color: #303030;
@@ -43,9 +43,23 @@
    box-shadow: 0px 4px 8px 2px rgba(173, 102, 213, 0.42);
    border-radius: 10px;
 }
+.input,
+.textarea {
+   &.error {
+      &::-webkit-input-placeholder {
+         color: red;
+      }
+      &::-moz-placeholder {
+         color: red;
+      }
+      box-shadow: 0px 4px 8px 2px rgba(214, 33, 33, 0.42);
+      border: 1px solid red;
+   }
+}
 
 .inputWrapperCheckbox {
    display: flex;
+   gap: 10px;
    width: 210px;
    margin-bottom: 20px;
    .inputCheckbox {
@@ -112,7 +126,8 @@
    }
 }
 
-.formSummeryError {
+.error {
+   display: inline-block;
    border-bottom: 1px solid red;
    color: red;
 }

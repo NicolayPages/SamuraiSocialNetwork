@@ -1,5 +1,3 @@
-import { Dispatch } from 'redux';
-import { stopSubmit } from 'redux-form';
 import { ThunkAction } from 'redux-thunk';
 import { profileAPI, ResultCodeEnum } from '../api';
 import { PhotosType, ProfileType } from '../types/types';
@@ -24,10 +22,12 @@ let initialState = {
    isFetching: false,
    status: '',
    editMode: false,
-   localIsFetching: false
+   localIsFetching: false,
+   errorMessage: null as string | null
 };
 
 type InitialStateType = typeof initialState;
+
 const profileReducer = (state = initialState, action: ActionTypes): InitialStateType => {
    switch (action.type) {
       case 'ADD_POST': {
@@ -87,6 +87,11 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
             ...state,
             editMode: false,
          };
+      case 'SET_PROFILE_ERROR':
+         return {
+            ...state,
+            errorMessage: action.errorMessage
+         };
       default:
          return state;
    }
@@ -104,6 +109,7 @@ export const actions = {
    toggleLocalIsFetching: (localIsFetching: boolean) => ({ type: 'LOCAL_IS_FETCHING', localIsFetching } as const),
    onEditMode: () => ({ type: 'ON_EDIT_MODE' } as const),
    offEditMode: () => ({ type: 'OFF_EDIT_MODE' } as const),
+   setProfileError: (errorMessage: string) => ({ type: 'SET_PROFILE_ERROR', errorMessage } as const),
 }
 
 
@@ -158,7 +164,7 @@ export const updateProfile = (profileData: ProfileType): ThunkType => async (dis
          dispatch(actions.offEditMode());
       } else {
          let errorMessage = response.data.messages.length > 0 ? response.data.messages[0] : "Some error";
-         dispatch(stopSubmit('editForm', { _error: errorMessage }));
+         dispatch(actions.setProfileError(errorMessage));
       }
       dispatch(actions.toggleIsFetching(false))
    } catch (error: any) {

@@ -32,3 +32,16 @@
    border-radius: 0 10px 10px 0;
    box-shadow: 0px 4px 8px 2px rgba(173, 102, 213, 0.42);
 }
+
+.error {
+   box-shadow: 0px 4px 8px 2px rgba(214, 33, 33, 0.42);
+   border: 1px solid red;
+   ::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: red;
+   }
+   ::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: red;
+   }
+}

@@ -7,6 +7,7 @@ import { getPosts, getProfile } from '../../../selectors/profile-selectors';
 import { ProfileType } from '../../../types/types';
 import { Post } from './Post/Post';
 import s from './Posts.module.scss';
+import * as Yup from 'yup';
 
 
 
@@ -78,29 +79,38 @@ const Posts: React.FC<PostsType> = React.memo((props) => {
 
 
 const PostsForm: React.FC<any> = React.memo((props) => {
+
    let initialValues = { postsFormMessage: '' }
+
    let onSubmit = (values: any, actions: any) => {
       props.onAddPost(values.postsFormMessage)
       actions.resetForm(true)
    }
+   const SignupSchema = Yup.object().shape({
+      postsFormMessage: Yup.string().required('Field is required'),
+   });
+
    return (
       <div>
          <Formik
             initialValues={initialValues}
             onSubmit={onSubmit}
             className={s.formWrapper}
+            validationSchema={SignupSchema}
          >
-            <Form className={s.form}>
-               <Field
-                  component={'textarea'}
-                  name={'postsFormMessage'}
-                  type="text"
-                  className={s.area}
-                  placeholder="your news..."
-               />
-               <ErrorMessage name="email" component="div" />
-               <button className={s.btn}>send</button>
-            </Form>
+            {({ errors, touched }) =>
+               <Form className={s.form}>
+                  <Field
+                     component={'textarea'}
+                     name={'postsFormMessage'}
+                     type="text"
+                     className={s.area}
+                     placeholder={'Write your news...'}
+                  />
+                  <button className={s.btn}>send</button>
+               </Form>
+            }
+
          </Formik>
       </div>
    )
