@@ -64,7 +64,11 @@ export const Users: React.FC<PropsUsersType> = React.memo((props) => {
             {
                isFetching ? <Preloader /> :
                   <div className={s.items} >
-                     {itemsArr.length != 0 ? itemsArr : <p className={s.notFound}>User is not found...</p>}
+                     {
+                        itemsArr.length !== 0 ?
+                           itemsArr :
+                           <p className={s.notFound}>User is not found...</p>
+                     }
                   </div>
             }
             <Paginator

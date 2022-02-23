@@ -1,9 +1,10 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-import { DialogsType, MessagesType } from '../../redux/dialogs-reducer';
-import { getDialogs, getMessages } from '../../selectors/dialogs-selectors';
+import { DialogsType, getAllMessages, MessagesType, startNewChat } from '../../redux/dialogs-reducer';
+import { getDialogs, getIsFetching, getMessages } from '../../selectors/dialogs-selectors';
+import Preloader from '../common/Preloader/Preloader';
 import { Dialog } from './Dialog/Dialog';
 import s from './Dialogs.module.scss'
 import { Message } from './Message/Message';
@@ -21,6 +22,19 @@ type PropsType = {
 const DialogsContainer: React.FC = React.memo(() => {
    const dialogs = useSelector(getDialogs)
    const messages = useSelector(getMessages)
+   const isFetching = useSelector(getIsFetching)
+
+   let dispatch = useDispatch()
+   let userId = 2
+
+   useEffect(() => {
+      dispatch(startNewChat(userId))
+      dispatch(getAllMessages(userId))
+   }, []);
+
+   if (isFetching) {
+      return <Preloader />
+   }
 
    return (
       <Dialogs

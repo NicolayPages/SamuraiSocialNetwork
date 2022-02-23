@@ -22,7 +22,7 @@ export const Edit = React.memo(() => {
    const errorMessage = useSelector(getProfileError)
 
    const dispatch = useDispatch()
-   let { offEditMode } = actions
+   let { offEditMode, setProfileError } = actions
 
    let onSubmit = (formData: any) => {
       dispatch(updateProfile(formData))
@@ -30,6 +30,7 @@ export const Edit = React.memo(() => {
 
    let offUserEditMode = () => {
       dispatch(offEditMode())
+      dispatch(setProfileError(null))
    }
 
    if (isFetching) {

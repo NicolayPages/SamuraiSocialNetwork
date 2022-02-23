@@ -109,7 +109,7 @@ export const actions = {
    toggleLocalIsFetching: (localIsFetching: boolean) => ({ type: 'LOCAL_IS_FETCHING', localIsFetching } as const),
    onEditMode: () => ({ type: 'ON_EDIT_MODE' } as const),
    offEditMode: () => ({ type: 'OFF_EDIT_MODE' } as const),
-   setProfileError: (errorMessage: string) => ({ type: 'SET_PROFILE_ERROR', errorMessage } as const),
+   setProfileError: (errorMessage: string | null) => ({ type: 'SET_PROFILE_ERROR', errorMessage } as const),
 }
 
 
@@ -155,8 +155,8 @@ export const updatePhoto = (photoFile: PhotosType): ThunkType => async (dispatch
 };
 
 export const updateProfile = (profileData: ProfileType): ThunkType => async (dispatch, getState: any) => {
+   dispatch(actions.toggleIsFetching(true))
    try {
-      dispatch(actions.toggleIsFetching(true))
       const userId = getState().auth.userId
       let response = await profileAPI.updateProfile(profileData)
       if (response.data.resultCode === ResultCodeEnum.Success) {
@@ -166,10 +166,10 @@ export const updateProfile = (profileData: ProfileType): ThunkType => async (dis
          let errorMessage = response.data.messages.length > 0 ? response.data.messages[0] : "Some error";
          dispatch(actions.setProfileError(errorMessage));
       }
-      dispatch(actions.toggleIsFetching(false))
    } catch (error: any) {
       dispatch(showError(error.message));
    }
+   dispatch(actions.toggleIsFetching(false))
 };
 
 

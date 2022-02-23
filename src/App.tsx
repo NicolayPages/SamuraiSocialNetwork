@@ -14,15 +14,12 @@ import { getInitialized } from './selectors/auth-selectors';
 
 
 
-
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
 const LoginContainer = React.lazy(() => import('./components/Login/Login'));
 const NotFound = React.lazy(() => import('./components/NotFound/NotFound'));
-const Music = React.lazy(() => import('./components/Music/Music'));
-const News = React.lazy(() => import('./components/News/News'));
-const Settings = React.lazy(() => import('./components/Settings/Settings'));
+const ChatPage = React.lazy(() => import('./components/Chat/ChatPage'));
 
 
 const App: React.FC = () => {
@@ -51,9 +48,7 @@ const App: React.FC = () => {
             <Route path='/dialogs' component={DialogsContainer} />
             <Route path='/users' component={UsersContainer} />
             <Route path='/login' component={LoginContainer} />
-            <Route path='/news' component={News} />
-            <Route path='/music' component={Music} />
-            <Route path='/settings' component={Settings} />
+            <Route path='/chat' component={ChatPage} />
             <Route path='*' component={NotFound} />
           </Switch>
         </Suspense>

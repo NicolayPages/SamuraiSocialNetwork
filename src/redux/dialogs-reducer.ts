@@ -1,4 +1,6 @@
-import { InferActionsTypes } from "./redux-store";
+import { ThunkAction } from "redux-thunk";
+import { dialogsAPI, ResultCodeEnum } from "../api";
+import { AppStateType, InferActionsTypes } from "./redux-store";
 
 
 export type DialogsType = {
@@ -21,6 +23,7 @@ let initialState = {
       { id: 1, name: "Billy", message: "Oh shit Im sorry" },
       { id: 2, name: "Alex", message: "Sorry fot what" },
    ] as Array<MessagesType>,
+   isFetching: false,
 };
 
 
@@ -41,6 +44,18 @@ const dialogsReducer = (state = initialState, action: ActionTypes): initialState
             messages: [...state.messages, newMessage],
          };
       };
+      case 'SET_NEW_MESSAGES': {
+         return {
+            ...state,
+            dialogs: [...state.dialogs, action.data]
+         }
+      };
+      case 'TOGGLE_IS_FETCHING': {
+         return {
+            ...state,
+            isFetching: action.isFetching
+         }
+      };
       default:
          return state;
    }
@@ -49,9 +64,35 @@ const dialogsReducer = (state = initialState, action: ActionTypes): initialState
 
 
 export const actions = {
-   addMessageActionCreator: (message: string) => ({ type: 'ADD_MESSAGE', message } as const)
+   addMessageActionCreator: (message: string) => ({ type: 'ADD_MESSAGE', message } as const),
+   getNewMessages: (data: any) => ({ type: 'SET_NEW_MESSAGES', data } as const),
+   toggleIsFetching: (isFetching: boolean) => ({ type: 'TOGGLE_IS_FETCHING', isFetching } as const)
 }
 
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
+
+export const getAllMessages = (userId: number): ThunkType => async (dispatch) => {
+   dispatch(actions.toggleIsFetching(true))
+   try {
+      let data = await dialogsAPI.getMessages(userId)
+      if (data.resultCode == ResultCodeEnum.Success) {
+         console.log(data)
+      }
+   } catch (error) {
+      console.log(error)
+   }
+   dispatch(actions.toggleIsFetching(false))
+}
+export const startNewChat = (userId: number): ThunkType => async (dispatch) => {
+   dispatch(actions.toggleIsFetching(true))
+   try {
+      let data = await dialogsAPI.startChatting(userId)
+      console.log(data)
+   } catch (error) {
+      console.log(error)
+   }
+   dispatch(actions.toggleIsFetching(false))
+}
 
 export default dialogsReducer;

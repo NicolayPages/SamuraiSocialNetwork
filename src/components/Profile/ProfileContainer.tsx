@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router';
+import { useParams, withRouter } from 'react-router';
 import { compose } from 'redux';
 import { actions, getStatus, getUserProfile, updatePhoto } from '../../redux/profile-reducer';
 import { getUserId } from '../../selectors/auth-selectors';
@@ -24,6 +24,7 @@ const ProfileContainer: React.FC<OwnProps> = React.memo((props) => {
   const authId = useSelector(getUserId)
   const editMode = useSelector(getEditMode)
   const localIsFetching = useSelector(getLocalIsFetching)
+  const userParams = useParams()
 
   let dispatch = useDispatch()
   let { onEditMode } = actions
@@ -38,6 +39,7 @@ const ProfileContainer: React.FC<OwnProps> = React.memo((props) => {
   }
 
   let refreshProfile = () => {
+    console.log(userParams)
     let user = props.match.params.userId;
     if (!user) {
       user = authId;

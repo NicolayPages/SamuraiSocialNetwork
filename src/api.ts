@@ -103,6 +103,22 @@ export const securityAPI = {
    },
 };
 
+export const dialogsAPI = {
+   startChatting(userId: number) {
+      return instance.put(`dialogs/${userId}`, userId).then(response => {
+         debugger;
+         return response
+      })
+   },
+   getMessages(userId: number) {
+      return instance.get<any>(`dialogs/${userId}/messages`)
+         .then(response => {
+            return response.data
+         })
+   }
+}
+
+
 
 
 export enum ResultCodeEnum {

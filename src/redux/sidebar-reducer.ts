@@ -14,10 +14,8 @@ let initialState = {
    links: [
       { id: 1, address: "profile", name: "Profile", },
       { id: 2, address: "dialogs", name: "Dialogs", },
-      { id: 3, address: "news", name: "News", },
-      { id: 4, address: "music", name: "Music", },
-      { id: 5, address: "users", name: "Users", },
-      { id: 6, address: "settings", name: "Settings", },
+      { id: 3, address: "chat", name: "Chat", },
+      { id: 4, address: "users", name: "Users", },
    ] as Array<LinksType>,
    friends: [] as Array<UsersType>,
    pageSize: 3,

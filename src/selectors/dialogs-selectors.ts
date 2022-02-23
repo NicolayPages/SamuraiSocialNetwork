@@ -6,4 +6,8 @@ export const getDialogs = (state: AppStateType) => {
 export const getMessages = (state: AppStateType) => {
    return state.dialogsPage.messages
 };
+export const getIsFetching = (state: AppStateType) => {
+   return state.dialogsPage.isFetching
+};
+
 

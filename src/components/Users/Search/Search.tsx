@@ -1,6 +1,8 @@
 import { Field, Form, Formik } from 'formik';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { FilterTypes } from '../../../redux/users-reducer';
+import { getFilter } from '../../../selectors/users-selectors';
 import s from './Search.module.scss';
 
 
@@ -11,7 +13,9 @@ type PropsType = {
 
 export const Search: React.FC<{} & PropsType> = React.memo((props) => {
 
-   const initialValues: any = { term: '', friend: '' };
+   const filter = useSelector(getFilter)
+
+   const initialValues: any = { term: filter.term, friend: String(filter.friend) };
 
    let onSubmit = (values: any) => {
       props.onFilterChanged(values)
