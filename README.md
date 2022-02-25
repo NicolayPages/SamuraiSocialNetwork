@@ -13,7 +13,7 @@ Briefly about the libraries used on the project:
 * `Redux-form` and `Formik` libraries used for processing forms
 * `ant-design` library used for the design of some components
 * `jest` library used for testing some components and reducers
-* 
+
 ### Languages and Tools
 
 ![TypeScript](https://img.shields.io/badge/-TypeScript-%233178c6?style=flat-square&logo=typescript&logoColor=white 
