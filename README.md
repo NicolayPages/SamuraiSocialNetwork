@@ -10,7 +10,7 @@ Briefly about the libraries used on the project:
 
 * `Redux` to implement the FLUX architecture
 * `axios` library is used for `GET` `POST` `PUT` `DELETE` requests
-* `Redux-form` and `Formik` libraries used for processing forms
+* `Formik` libraries used for processing forms
 * `ant-design` library used for the design of some components
 * `jest` library used for testing some components and reducers
 
