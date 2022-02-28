@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import { PhotosType, ProfileType, UsersType } from './types/types';
+import { PhotosType, ProfileType, UsersType } from '../types/types';
 
 
 const instance = axios.create({
@@ -106,7 +106,6 @@ export const securityAPI = {
 export const dialogsAPI = {
    startChatting(userId: number) {
       return instance.put(`dialogs/${userId}`, userId).then(response => {
-         debugger;
          return response
       })
    },

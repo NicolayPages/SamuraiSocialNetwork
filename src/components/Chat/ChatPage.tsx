@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ChatMessageAPIType } from '../../chat-api'
+import { ChatMessageAPIType } from '../../api/chat-api'
 import { useDispatch, useSelector } from 'react-redux'
 import { sendMessage, startMessagesListening, stopMessagesListening } from '../../redux/chat-reducer'
 import { AppStateType } from '../../redux/redux-store'
@@ -33,6 +33,7 @@ const Chat: React.FC = () => {
     return <>
         {status === 'error' && <div>Some error occured. Please refresh the page</div>}
         <div className={s.chat}>
+            <h1 className={s.title}>Users chat</h1>
             <Messages />
             <AddMessageForm />
         </div>

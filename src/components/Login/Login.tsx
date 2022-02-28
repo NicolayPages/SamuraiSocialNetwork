@@ -39,8 +39,10 @@ const LoginContainer: React.FC = React.memo(() => {
 const Login: React.FC<any> = React.memo((props) => {
    return (
       <div className={s.container}>
-         <h1 className={s.title}>Login</h1>
-         < LoginForm onSubmit={props.onSubmitForm} captcha={props.captcha} authError={props.authError} />
+         <div className={s.content}>
+            <h1 className={s.title}>Login</h1>
+            < LoginForm onSubmit={props.onSubmitForm} captcha={props.captcha} authError={props.authError} />
+         </div>
       </div>
    )
 })

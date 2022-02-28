@@ -1,5 +1,5 @@
 import { ThunkAction } from "redux-thunk";
-import { usersAPI } from "../api";
+import { usersAPI } from "../api/api";
 import { UsersType } from "../types/types";
 import { showError } from "./errors-reducer";
 import { AppStateType, InferActionsTypes } from "./redux-store";
@@ -73,9 +73,10 @@ export const requestFriends = (currentPage: number, pageSize: number): ThunkType
       let data = await usersAPI.getFiends(currentPage, pageSize);
       dispatch(actions.setFriends(data.items));
       dispatch(actions.setTotalCount(data.totalCount));
-      dispatch(actions.setIsFetching(false));
    } catch (error: any) {
       dispatch(showError(error.message));
+   } finally {
+      dispatch(actions.setIsFetching(false));
    }
 };
 export const setFriendsPage = (p: number, pageSize: number): ThunkType => async (dispatch) => {
@@ -84,9 +85,10 @@ export const setFriendsPage = (p: number, pageSize: number): ThunkType => async 
       dispatch(actions.setPage(p));
       let data = await usersAPI.getFiends(p, pageSize);
       dispatch(actions.setFriends(data.items));
-      dispatch(actions.setIsFetching(false));
    } catch (error: any) {
       dispatch(showError(error.message));
+   } finally {
+      dispatch(actions.setIsFetching(false));
    }
 };
 

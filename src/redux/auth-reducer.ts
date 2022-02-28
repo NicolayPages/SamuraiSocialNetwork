@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { authAPI, ResultCodeEnum, securityAPI } from '../api';
+import { authAPI, ResultCodeEnum, securityAPI } from '../api/api';
 import { showError } from './errors-reducer';
 import { AppStateType, InferActionsTypes } from './redux-store';
 

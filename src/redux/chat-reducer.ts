@@ -1,6 +1,6 @@
 import { AppStateType, InferActionsTypes } from './redux-store'
 import { Dispatch } from 'redux'
-import { chatAPI, ChatMessageAPIType, StatusType } from '../chat-api'
+import { chatAPI, ChatMessageAPIType, StatusType } from '../api/chat-api'
 import { v1 as uuidv1 } from 'uuid';
 import { ThunkAction } from 'redux-thunk';
 

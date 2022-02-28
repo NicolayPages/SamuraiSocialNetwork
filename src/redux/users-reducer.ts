@@ -1,6 +1,6 @@
 import { showError } from './errors-reducer';
-import { updateObjectInArray } from '../utilits/validators/object-helpers';
-import { usersAPI, profileAPI } from '../api';
+import { updateObjectInArray } from '../utilits/object-helpers';
+import { usersAPI, profileAPI } from '../api/api';
 import { UsersType } from '../types/types';
 import { AppStateType, InferActionsTypes } from './redux-store';
 import { ThunkAction } from 'redux-thunk';
@@ -106,9 +106,10 @@ export const requestUsers = (currentPage: number, pageSize: number, filter: { te
       let data = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friend);
       dispatch(actions.setUsers(data.items));
       dispatch(actions.setTotalCount(data.totalCount));
-      dispatch(actions.toggleIsFetching(false));
    } catch (error: any) {
       dispatch(showError(error.message));
+   } finally {
+      dispatch(actions.toggleIsFetching(false));
    }
 };
 
@@ -132,15 +133,5 @@ export const unfollowUsers = (userId: number): ThunkType => {
    }
 };
 
-export const getUsersTest = () => async (dispatch: any) => {
-   try {
-      dispatch(actions.toggleIsFetching(true));
-      let data = await profileAPI.getUsersForProfile();
-      dispatch(actions.setUsers(data.items));
-      dispatch(actions.toggleIsFetching(false));
-   } catch (error: any) {
-      dispatch(showError(error.message));
-   }
-};
 
 export default usersReducer;

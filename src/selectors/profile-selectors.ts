@@ -23,3 +23,7 @@ export const getLocalIsFetching = (state: AppStateType) => {
 export const getProfileError = (state: AppStateType) => {
    return state.profilePage.errorMessage
 };
+
+export const getPhoto = (state: AppStateType) => {
+   return state.profilePage.ownerPhoto
+};

@@ -2,11 +2,15 @@
    grid-area: s;
    background-color: #ad66d5;
    min-height: 100vh;
+   width: 200px;
    margin-top: 70px;
    border-radius: 0px 10px 10px 0px;
    box-shadow: 1px 1px 12px 0px rgba(34, 60, 80, 0.2);
    z-index: 3;
    position: fixed;
+   @media (max-width: 900px) {
+      width: 150px;
+   }
    .Sidebar__list {
       padding-left: 20px;
       margin-top: 30px;

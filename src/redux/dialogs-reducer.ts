@@ -1,5 +1,5 @@
 import { ThunkAction } from "redux-thunk";
-import { dialogsAPI, ResultCodeEnum } from "../api";
+import { dialogsAPI, ResultCodeEnum } from "../api/api";
 import { AppStateType, InferActionsTypes } from "./redux-store";
 
 
@@ -73,26 +73,29 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
 
 export const getAllMessages = (userId: number): ThunkType => async (dispatch) => {
-   dispatch(actions.toggleIsFetching(true))
    try {
+      dispatch(actions.toggleIsFetching(true))
       let data = await dialogsAPI.getMessages(userId)
       if (data.resultCode == ResultCodeEnum.Success) {
          console.log(data)
       }
    } catch (error) {
       console.log(error)
+   } finally {
+      dispatch(actions.toggleIsFetching(false))
    }
-   dispatch(actions.toggleIsFetching(false))
+
 }
 export const startNewChat = (userId: number): ThunkType => async (dispatch) => {
-   dispatch(actions.toggleIsFetching(true))
    try {
+      dispatch(actions.toggleIsFetching(true))
       let data = await dialogsAPI.startChatting(userId)
-      console.log(data)
    } catch (error) {
-      console.log(error)
+
+   } finally {
+      dispatch(actions.toggleIsFetching(false))
    }
-   dispatch(actions.toggleIsFetching(false))
+
 }
 
 export default dialogsReducer;

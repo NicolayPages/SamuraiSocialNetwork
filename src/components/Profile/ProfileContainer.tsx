@@ -24,10 +24,12 @@ const ProfileContainer: React.FC<OwnProps> = React.memo((props) => {
   const authId = useSelector(getUserId)
   const editMode = useSelector(getEditMode)
   const localIsFetching = useSelector(getLocalIsFetching)
-  const userParams = useParams()
+  const params = useParams<{ userId?: string }>()
+
 
   let dispatch = useDispatch()
   let { onEditMode } = actions
+
 
   let onUpdatePhoto = (file: any) => {
     dispatch(updatePhoto(file))
@@ -39,13 +41,9 @@ const ProfileContainer: React.FC<OwnProps> = React.memo((props) => {
   }
 
   let refreshProfile = () => {
-    console.log(userParams)
     let user = props.match.params.userId;
     if (!user) {
       user = authId;
-      if (!user) {
-        props.history.push('/login');
-      }
     };
     dispatch(getUserProfile(user))
     dispatch(getStatus(user))

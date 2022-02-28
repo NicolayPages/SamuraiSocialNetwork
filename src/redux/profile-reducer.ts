@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { profileAPI, ResultCodeEnum } from '../api';
+import { profileAPI, ResultCodeEnum } from '../api/api';
 import { PhotosType, ProfileType } from '../types/types';
 import { showError } from './errors-reducer';
 import { AppStateType, InferActionsTypes } from './redux-store';
@@ -23,7 +23,8 @@ let initialState = {
    status: '',
    editMode: false,
    localIsFetching: false,
-   errorMessage: null as string | null
+   errorMessage: null as string | null,
+   ownerPhoto: null as string | null
 };
 
 type InitialStateType = typeof initialState;
@@ -92,6 +93,11 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
             ...state,
             errorMessage: action.errorMessage
          };
+      case 'SET_OWNER_PHOTO':
+         return {
+            ...state,
+            ownerPhoto: action.photo
+         };
       default:
          return state;
    }
@@ -110,6 +116,7 @@ export const actions = {
    onEditMode: () => ({ type: 'ON_EDIT_MODE' } as const),
    offEditMode: () => ({ type: 'OFF_EDIT_MODE' } as const),
    setProfileError: (errorMessage: string | null) => ({ type: 'SET_PROFILE_ERROR', errorMessage } as const),
+   setOwnerPhoto: (photo: string | null) => ({ type: 'SET_OWNER_PHOTO', photo } as const),
 }
 
 
@@ -119,15 +126,25 @@ export const actions = {
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
 export const getUserProfile = (userId: number): ThunkType => async (dispatch) => {
-   dispatch(actions.toggleIsFetching(true));
-   let response = await profileAPI.getProfile(userId);
-   dispatch(actions.setUserProfile(response.data));
-   dispatch(actions.toggleIsFetching(false));
+   try {
+      dispatch(actions.toggleIsFetching(true));
+      let response = await profileAPI.getProfile(userId);
+      dispatch(actions.setUserProfile(response.data));
+   } catch (error: any) {
+      dispatch(showError(error.message));
+   } finally {
+      dispatch(actions.toggleIsFetching(false));
+   }
 };
 
 export const getStatus = (userId: number): ThunkType => async (dispatch) => {
-   let response = await profileAPI.getStatus(userId);
-   dispatch(actions.setStatus(response.data));
+   try {
+      let response = await profileAPI.getStatus(userId);
+      dispatch(actions.setStatus(response.data));
+   } catch (error: any) {
+      dispatch(showError(error.message));
+   }
+
 };
 
 export const updateStatus = (status: string): ThunkType => async (dispatch) => {
@@ -148,15 +165,16 @@ export const updatePhoto = (photoFile: PhotosType): ThunkType => async (dispatch
       if (response.data.resultCode === ResultCodeEnum.Success) {
          dispatch(actions.setPhoto(response.data.data.photos));
       }
-      dispatch(actions.toggleLocalIsFetching(false))
    } catch (error: any) {
       dispatch(showError(error.message));
+   } finally {
+      dispatch(actions.toggleLocalIsFetching(false))
    }
 };
 
 export const updateProfile = (profileData: ProfileType): ThunkType => async (dispatch, getState: any) => {
-   dispatch(actions.toggleIsFetching(true))
    try {
+      dispatch(actions.toggleIsFetching(true))
       const userId = getState().auth.userId
       let response = await profileAPI.updateProfile(profileData)
       if (response.data.resultCode === ResultCodeEnum.Success) {
@@ -168,9 +186,19 @@ export const updateProfile = (profileData: ProfileType): ThunkType => async (dis
       }
    } catch (error: any) {
       dispatch(showError(error.message));
+   } finally {
+      dispatch(actions.toggleIsFetching(false))
    }
-   dispatch(actions.toggleIsFetching(false))
+
 };
 
+export const getOwnerPhoto = (userId: number): ThunkType => async (dispatch) => {
+   try {
+      let response = await profileAPI.getProfile(userId);
+      dispatch(actions.setOwnerPhoto(response.data.photos.small));
+   } catch (error: any) {
+      dispatch(showError(error.message));
+   }
+};
 
 export default profileReducer;

@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { compose } from 'redux';
-import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { DialogsType, getAllMessages, MessagesType, startNewChat } from '../../redux/dialogs-reducer';
 import { getDialogs, getIsFetching, getMessages } from '../../selectors/dialogs-selectors';
 import Preloader from '../common/Preloader/Preloader';
 import { Dialog } from './Dialog/Dialog';
-import s from './Dialogs.module.scss'
+import s from './Dialogs.module.scss';
 import { Message } from './Message/Message';
 import { MessageForm } from './MessageForm/MessageFormContainer';
 
@@ -73,8 +71,6 @@ const Dialogs: React.FC<PropsType> = React.memo((props) => {
 
 
 
-export default compose<React.ComponentType>(
-   withAuthRedirect,
-)(DialogsContainer);
+export default DialogsContainer
 
 
