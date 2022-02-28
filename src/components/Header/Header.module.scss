@@ -2,16 +2,12 @@
    grid-area: h;
    background-color: #ad66d5;
    z-index: 3;
-   height: 100%;
    display: flex;
    justify-content: space-between;
    align-items: center;
-   .logo {
-      width: 50px;
-      img {
-         max-width: 100%;
-      }
-   }
+   position: fixed;
+   height: 60px;
+   width: 100%;
 }
 
 .container {
@@ -78,5 +74,18 @@
    top: 0;
    &:active {
       top: 1px;
+   }
+}
+
+.logo {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   img {
+      width: 45px;
+   }
+   p {
+      font-size: 24px;
+      color: #fff;
    }
 }

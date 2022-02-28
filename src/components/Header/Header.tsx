@@ -56,7 +56,8 @@ const Header: React.FC<PropsType> = React.memo((props) => {
       <div className={s.container}>
         <div className={s.headerBody}>
           <div className={s.logo}>
-            <img src={logo} alt="logo" />
+            <div><img src={logo} alt="logo" /></div>
+            <p>SamuraiNetwork</p>
           </div>
           <div className={s.loginBlock}>
             {isAuth ?

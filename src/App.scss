@@ -74,7 +74,6 @@ h6 {
    font-weight: 400;
 }
 /*--------------------*/
-
 .App {
    overflow-x: hidden;
    display: grid;
@@ -117,4 +116,8 @@ h6 {
 
 .AppNotAuthLogin {
    flex: 1 1 auto;
+}
+
+body.App.lock {
+   overflow: hidden;
 }

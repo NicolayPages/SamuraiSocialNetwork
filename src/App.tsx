@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, withRouter } from 'react-router';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { compose } from 'redux';
 import './App.scss';
 import ErrorPopup from './components/common/ErrorPopup/ErrorPopup';
@@ -23,7 +23,6 @@ const ChatPage = React.lazy(() => import('./components/Chat/ChatPage'));
 
 
 const App: React.FC = () => {
-
   const initialized = useSelector(getInitialized)
   let dispatch = useDispatch()
 
@@ -36,8 +35,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="App" >
-      <ErrorPopup />
+    <div className='App'>
       <HeaderContainer />
       <SidebarContainer />
       <div className="app__wrapper_content">
@@ -49,11 +47,11 @@ const App: React.FC = () => {
             <Route path='/users' component={UsersContainer} />
             <Route path='/login' component={LoginContainer} />
             <Route path='/chat' component={ChatPage} />
-            <Route path='*' component={NotFound} />
+            <Redirect to='/users' />
           </Switch>
         </Suspense>
       </div>
-      <Footer />
+      <ErrorPopup />
     </div>
   );
 }

@@ -3,19 +3,22 @@ import { usersAPI } from "../api";
 import { UsersType } from "../types/types";
 import { showError } from "./errors-reducer";
 import { AppStateType, InferActionsTypes } from "./redux-store";
+import { CommentOutlined, MessageOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+
 
 export type LinksType = {
    id: number
    address: string
    name: string
+   icon: any
 }
 
 let initialState = {
    links: [
-      { id: 1, address: "profile", name: "Profile", },
-      { id: 2, address: "dialogs", name: "Dialogs", },
-      { id: 3, address: "chat", name: "Chat", },
-      { id: 4, address: "users", name: "Users", },
+      { id: 1, address: "profile", name: "Profile", icon: UserOutlined },
+      { id: 2, address: "dialogs", name: "Dialogs", icon: MessageOutlined },
+      { id: 3, address: "chat", name: "Chat", icon: CommentOutlined },
+      { id: 4, address: "users", name: "Users", icon: TeamOutlined },
    ] as Array<LinksType>,
    friends: [] as Array<UsersType>,
    pageSize: 3,

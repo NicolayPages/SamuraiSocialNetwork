@@ -2,9 +2,11 @@
    grid-area: s;
    background-color: #ad66d5;
    min-height: 100vh;
+   margin-top: 70px;
    border-radius: 0px 10px 10px 0px;
    box-shadow: 1px 1px 12px 0px rgba(34, 60, 80, 0.2);
    z-index: 3;
+   position: fixed;
    .Sidebar__list {
       padding-left: 20px;
       margin-top: 30px;
@@ -18,7 +20,14 @@
       }
    }
    .sidebar__link {
-      a {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      .icon {
+         font-size: 20px;
+         color: #fff;
+      }
+      .link {
          font-size: 20px;
          color: #fff;
       }

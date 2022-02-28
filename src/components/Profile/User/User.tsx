@@ -9,6 +9,7 @@ import { PropsType } from '../Profile';
 import { Status } from '../Status/Status';
 import s from './User.module.scss';
 
+
 export const User: React.FC<PropsType> = React.memo((props) => {
    const { isOwner, editMode, profile, localIsFetching, updatePhoto, onEditUserMode, } = props
 

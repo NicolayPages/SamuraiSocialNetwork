@@ -41,7 +41,7 @@ export const SidebarContainer: React.FC = React.memo(() => {
 
 
 const Sidebar: React.FC<PropsType> = React.memo((props) => {
-  let menuElements = props.links.map((l: LinksType) => <Menu_link key={l.id} name={l.name} address={l.address} />)
+  let menuElements = props.links.map((l: LinksType) => <Menu_link key={l.id} name={l.name} address={l.address} icon={l.icon}/>)
   return (
     <nav className={s.Sidebar}>
       <ul className={s.Sidebar__list}>
